@@ -1,0 +1,6 @@
+-draw the board
+-draw the place to choose colors for client
+-write the rules on the home screen
+-start playing button
+-choosing code infrastructure for server
+-figure out what data structure to use

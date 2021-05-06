@@ -51,6 +51,11 @@ public class ServerScreen extends JPanel{
     return new Dimension(800,600);
   }
 
+  public void paintComponent(Graphics g){
+    super.paintComponent(g);
+    
+  }
+
   public void poll() throws IOException, UnknownHostException{
     // String hostName = "localhost"; 
     // int portNumber = 1024;
