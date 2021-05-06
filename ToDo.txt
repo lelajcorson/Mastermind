@@ -4,3 +4,4 @@
 -start playing button
 -choosing code infrastructure for server
 -figure out what data structure to use
+	-doubly linked list - FIX THE .next() so it doesn't draw two of the same color
