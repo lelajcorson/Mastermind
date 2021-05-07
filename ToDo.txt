@@ -1,4 +1,3 @@
--draw the board
 -draw the place to choose colors for client
 -write the rules on the home screen
 -start playing button

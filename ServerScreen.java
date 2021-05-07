@@ -80,6 +80,21 @@ public class ServerScreen extends JPanel implements ActionListener{
         int y = 75;
 
         g.drawRoundRect(x, y, 300, 500, 20, 20);
+        g.drawRoundRect(x + 50, y - 50, 200, 50, 20, 20);
+
+        //circles for code
+        code.reset();
+        Color cColor = code.next();
+        for(int c = 0; c < 200; c += 50){
+            if(cColor != null){
+                g.setColor(cColor);
+                g.fillOval(x + 60 + c, y - 40, 30, 30);
+                cColor = code.next();
+            }
+            else{
+                g.drawOval(x + 60 + c, y - 40, 30, 30);
+            }
+        }
 
         for(int i = 50; i < 500; i += 50){
             g.drawLine(x, y + i, x + 300, y + i);

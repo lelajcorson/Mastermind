@@ -20,8 +20,15 @@ public class ClientScreen extends JPanel implements ActionListener{
 
     private DLList<Color> guesses;
     private DLList<Color> feedback;
+    private DLList<Color> colorPallete;
     private JButton submit;
     private boolean guessSubmit;
+    private Color yellow;
+    private Color teal;
+    private Color orange;
+    private Color pink;
+    private Color blue;
+    private Color brown;
 
     public ClientScreen() {
         setLayout(null);
@@ -29,8 +36,23 @@ public class ClientScreen extends JPanel implements ActionListener{
         
         guessSubmit = false;
 
+        yellow = new Color(245, 215, 161);
+        teal = new Color(155, 194,189);
+        orange = new Color(240, 162, 142);
+        pink = new Color(186, 99, 117);
+        blue = new Color(0, 75, 90);
+        brown = new Color(136, 59, 31);
+
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
+        colorPallete = new DLList<Color>();
+
+        colorPallete.add(yellow);
+        colorPallete.add(orange);
+        colorPallete.add(pink);
+        colorPallete.add(brown);
+        colorPallete.add(blue);
+        colorPallete.add(teal);
 
         submit = new JButton("Submit");
 		submit.setBounds(550, 400, 100, 40);
@@ -68,7 +90,7 @@ public class ClientScreen extends JPanel implements ActionListener{
     }
 
     public void paintComponent(Graphics g){
-        int x = 100;
+        int x = 50;
         int y = 75;
 
         g.drawRoundRect(x, y, 300, 500, 20, 20);
@@ -111,6 +133,22 @@ public class ClientScreen extends JPanel implements ActionListener{
                 else{
                     g.drawOval(c + x + 250, r + y + 10, 10, 10);
                 }
+            }
+        }
+
+        //drawing the color pallete
+        g.drawRoundRect(x + 400, y, 250, 50, 20, 20);
+        
+        colorPallete.reset();
+        Color pColor = colorPallete.next();
+        for(int c = 0; c < 240; c += 40){
+            if(pColor != null){
+                g.setColor(pColor);
+                g.fillOval(x + 410 + c, y + 10, 30, 30);
+                pColor = colorPallete.next();
+            }
+            else{
+                g.drawOval(x + 410 + c, y + 10, 30, 30);
             }
         }
     }
