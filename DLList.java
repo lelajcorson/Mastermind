@@ -1,4 +1,6 @@
-public class DLList<E> implements Serializeable{
+import java.io.Serializable;
+
+public class DLList<E> implements Serializable{
     private Node<E> head;
     private Node<E> tail;
     private int size;

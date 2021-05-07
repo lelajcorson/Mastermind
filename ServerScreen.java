@@ -21,8 +21,9 @@ public class ServerScreen extends JPanel implements ActionListener{
     private DLList<Color> feedback;
     private DLList<Color> code;
     private JButton submit;
-    String hostName;
-    int portNumber;
+    private String hostName;
+    private int portNumber;
+    private boolean feedbackSubmit;
 
     public ServerScreen() {
         setLayout(null);
@@ -34,6 +35,7 @@ public class ServerScreen extends JPanel implements ActionListener{
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
         code = new DLList<Color>();
+        feedbackSubmit = false;
 
         submit = new JButton("Submit");
 		submit.setBounds(550, 400, 100, 40);
@@ -125,19 +127,21 @@ public class ServerScreen extends JPanel implements ActionListener{
         ServerSocket sSocket = new ServerSocket(portNumber);
         Socket cSocket = sSocket.accept();
         PushbackInputStream pin = new PushbackInputStream(cSocket.getInputStream());
+        ObjectOutputStream out = new ObjectOutputStream(cSocket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(cSocket.getInputStream());
 
         try {
             while(true){
-                if(feedbackSumbit){
-                    ObjectOutputStream out = new ObjectOutputStream(cSocket.getOutputStream());
-
+                if(feedbackSubmit){
                     out.reset();
-                    out.write(feedback);
+                    out.writeObject(feedback);
 
-                    feedbackSumbit = false;
+                    feedbackSubmit = false;
                 }
-                else if(pin != 0){
-                    
+                else if(pin.available() != 0){
+                    DLList inputList = (DLList)in.readObject();
+
+                    guesses = inputList;
                 }
 
             repaint();
@@ -148,6 +152,9 @@ public class ServerScreen extends JPanel implements ActionListener{
         }
         catch (IOException e) {
           System.out.println("IO Exception: " + e);
+        }
+        catch(ClassNotFoundException e){
+            System.out.println(e);
         }
 
 

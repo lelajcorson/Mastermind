@@ -9,24 +9,34 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.net.Socket;
 
-public class ClientScreen extends JPanel {
-    private JTextArea textArea;
-    private JButton send;
-    private JTextField textfield;
-    private JScrollPane scrollPane;
-    private String sendText;
-    private String messages;
-    private boolean toSend;
+public class ClientScreen extends JPanel implements ActionListener{
+    // private JTextArea textArea;
+    // private JButton send;
+    // private JTextField textfield;
+    // private JScrollPane scrollPane;
+    // private String sendText;
+    // private String messages;
+    // private boolean toSend;
 
     private DLList<Color> guesses;
     private DLList<Color> feedback;
+    private JButton submit;
+    private boolean guessSubmit;
 
     public ClientScreen() {
         setLayout(null);
         this.setFocusable(true);
+        
+        guessSubmit = false;
 
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
+
+        submit = new JButton("Submit");
+		submit.setBounds(550, 400, 100, 40);
+		submit.addActionListener(this);
+		add(submit);
+		submit.setVisible(false);
 
         // messages = "";
         // toSend = false;
@@ -57,19 +67,87 @@ public class ClientScreen extends JPanel {
         return new Dimension(800, 600);
     }
 
+    public void paintComponent(Graphics g){
+        int x = 100;
+        int y = 75;
+
+        g.drawRoundRect(x, y, 300, 500, 20, 20);
+
+        for(int i = 50; i < 500; i += 50){
+            g.drawLine(x, y + i, x + 300, y + i);
+        }
+
+        g.drawLine(x + 240, y, x + 240, y + 500);
+
+        guesses.reset();
+        Color color = guesses.next();
+        //drawing the guess circles
+        for(int r = 0; r < 500; r += 50){
+            for(int c = 0; c < 240; c += 60){
+                if(color != null){
+                    g.setColor(color);
+                    g.fillOval(c+ x + 10, r + y + 10, 30, 30);
+                    color = guesses.next();
+                }
+                else{
+                    g.drawOval(c+ x + 10, r + y + 10, 30, 30);
+                }
+
+                
+            }
+        }
+
+        //drawing the feedback circles
+        feedback.reset();
+        Color fColor = feedback.next();
+
+        for(int r = 0; r < 500; r += 25){
+            for(int c = 0; c < 60; c += 30){
+                if(fColor != null){
+                    g.setColor(fColor);
+                    g.fillOval(c + x + 250, r + y + 10, 10, 10);
+                    fColor = feedback.next();
+                }
+                else{
+                    g.drawOval(c + x + 250, r + y + 10, 10, 10);
+                }
+            }
+        }
+    }
+
 
     public void poll() throws IOException, UnknownHostException {
+        String hostName = "localhost"; 
+        int portNumber = 1024;
+
+        try {
+
+            Socket sSocket = new Socket(hostName, portNumber);
+
+            while(true){
+                PushbackInputStream pin = new PushbackInputStream(sSocket.getInputStream());
+                ObjectOutputStream out = new ObjectOutputStream(sSocket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(sSocket.getInputStream());
 
 
-        // try {
+                if(pin.available() != 0){
+                    DLList inputList = (DLList)in.readObject();
 
-        //     String hostName = "localhost"; 
-        //     int portNumber = 1024;
+                    feedback = inputList;
+                }
+                else if(guessSubmit){
 
-        //     Socket sSocket = new Socket(hostName, portNumber);
-
-
-
+                }
+            }
+        }catch (UnknownHostException e) {
+          System.out.println("Unknown host");
+        }
+        catch (IOException e) {
+          System.out.println("IO Exception: " + e);
+        }
+        catch(ClassNotFoundException e){
+            System.out.println(e);
+        }
         //   while(true){
         //     BufferedReader in = new BufferedReader(new InputStreamReader(sSocket.getInputStream()));
         //     PushbackInputStream pin = new PushbackInputStream(sSocket.getInputStream());
@@ -103,6 +181,10 @@ public class ClientScreen extends JPanel {
         // catch (IOException e) {
         //   System.out.println("IO Exception: " + e);
         // }
+    }
+
+    public void actionPerformed(ActionEvent e){
+
     }
 
 }
