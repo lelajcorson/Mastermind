@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.net.*;
 
-public class ServerScreen extends JPanel {
+public class ServerScreen extends JPanel implements ActionListener{
     //   private JTextArea textArea;
     //   private JButton send;
     //   private JTextField textfield;
@@ -20,16 +20,26 @@ public class ServerScreen extends JPanel {
     private DLList<Color> guesses;
     private DLList<Color> feedback;
     private DLList<Color> code;
+    private JButton submit;
+    String hostName;
+    int portNumber;
 
     public ServerScreen() {
         setLayout(null);
         this.setFocusable(true);
 
+        hostName = "localhost";
+        portNumber = 1024;
+
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
         code = new DLList<Color>();
 
-        guesses.add(new Color(0, 0, 0));
+        submit = new JButton("Submit");
+		submit.setBounds(550, 400, 100, 40);
+		submit.addActionListener(this);
+		add(submit);
+		submit.setVisible(false);
 
         // messages = "";
         // toSend = false;
@@ -75,6 +85,7 @@ public class ServerScreen extends JPanel {
 
         g.drawLine(x + 240, y, x + 240, y + 500);
 
+        guesses.reset();
         Color color = guesses.next();
         //drawing the guess circles
         for(int r = 0; r < 500; r += 50){
@@ -93,17 +104,53 @@ public class ServerScreen extends JPanel {
         }
 
         //drawing the feedback circles
+        feedback.reset();
+        Color fColor = feedback.next();
+
+        for(int r = 0; r < 500; r += 25){
+            for(int c = 0; c < 60; c += 30){
+                if(fColor != null){
+                    g.setColor(fColor);
+                    g.fillOval(c + x + 250, r + y + 10, 10, 10);
+                    fColor = feedback.next();
+                }
+                else{
+                    g.drawOval(c + x + 250, r + y + 10, 10, 10);
+                }
+            }
+        }
     }
 
     public void poll() throws IOException, UnknownHostException {
-        // String hostName = "localhost"; 
-        // int portNumber = 1024;
-        // ServerSocket sSocket = new ServerSocket(portNumber);
-        // Socket cSocket = sSocket.accept();
+        ServerSocket sSocket = new ServerSocket(portNumber);
+        Socket cSocket = sSocket.accept();
+        PushbackInputStream pin = new PushbackInputStream(cSocket.getInputStream());
+
+        try {
+            while(true){
+                if(feedbackSumbit){
+                    ObjectOutputStream out = new ObjectOutputStream(cSocket.getOutputStream());
+
+                    out.reset();
+                    out.write(feedback);
+
+                    feedbackSumbit = false;
+                }
+                else if(pin != 0){
+                    
+                }
+
+            repaint();
+          }
+        }
+        catch (UnknownHostException e) {
+          System.out.println("Unknown host");
+        }
+        catch (IOException e) {
+          System.out.println("IO Exception: " + e);
+        }
 
 
-        // try {
-        //   while(true){
         //     //System.out.println("in while true");
         //     BufferedReader in = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
         //     PushbackInputStream pin = new PushbackInputStream(cSocket.getInputStream());
@@ -126,14 +173,12 @@ public class ServerScreen extends JPanel {
 
         //       toSend = false;
         //     }
-        //     repaint();
-        //   }
-        // }
-        // catch (UnknownHostException e) {
-        //   System.out.println("Unknown host");
-        // }
-        // catch (IOException e) {
-        //   System.out.println("IO Exception: " + e);
-        // }
+    }
+
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource() == submit){
+            feedbackSubmit = true;
+            submit.setVisible(false);
+        }
     }
 }

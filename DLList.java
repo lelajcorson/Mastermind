@@ -1,4 +1,4 @@
-public class DLList<E>{
+public class DLList<E> implements Serializeable{
     private Node<E> head;
     private Node<E> tail;
     private int size;
@@ -37,6 +37,10 @@ public class DLList<E>{
         
         tracker = tracker.next();
         return tracker.get();
+    }
+
+    public void reset(){
+        tracker = null;
     }
 
     public E get(int loc){
