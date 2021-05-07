@@ -3,5 +3,4 @@
 -write the rules on the home screen
 -start playing button
 -choosing code infrastructure for server
--figure out what data structure to use
-	-doubly linked list - FIX THE .next() so it doesn't draw two of the same color
+-figure out what data structure to use (DLList)

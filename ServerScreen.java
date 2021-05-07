@@ -75,7 +75,7 @@ public class ServerScreen extends JPanel {
 
         g.drawLine(x + 240, y, x + 240, y + 500);
 
-        Color color = guesses.get(0);
+        Color color = guesses.next();
         //drawing the guess circles
         for(int r = 0; r < 500; r += 50){
             for(int c = 0; c < 240; c += 60){
