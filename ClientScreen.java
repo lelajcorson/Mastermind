@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.net.Socket;
 import javax.swing.ImageIcon;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 
-public class ClientScreen extends JPanel implements ActionListener{
+public class ClientScreen extends JPanel implements ActionListener, MouseListener{
     // private JTextArea textArea;
     // private JButton send;
     // private JTextField textfield;
@@ -31,13 +33,18 @@ public class ClientScreen extends JPanel implements ActionListener{
     private Color blue;
     private Color brown;
     private int screenSetting;
+    private int currentRowIndex;
+    private Color currentColor;
 
     public ClientScreen() {
         setLayout(null);
         this.setFocusable(true);
+        addMouseListener(this);
         
         guessSubmit = false;
         screenSetting = 0;
+        currentRowIndex = 0;
+        currentColor = null;
 
         yellow = new Color(245, 215, 161);
         teal = new Color(155, 194,189);
@@ -115,11 +122,11 @@ public class ClientScreen extends JPanel implements ActionListener{
                 for(int c = 0; c < 240; c += 60){
                     if(color != null){
                         g.setColor(color);
-                        g.fillOval(c+ x + 10, r + y + 10, 30, 30);
+                        g.fillOval(c + x + 15, r + y + 10, 30, 30);
                         color = guesses.next();
                     }
                     else{
-                        g.drawOval(c+ x + 10, r + y + 10, 30, 30);
+                        g.drawOval(c+ x + 15, r + y + 10, 30, 30);
                     }
 
                     
@@ -239,11 +246,63 @@ public class ClientScreen extends JPanel implements ActionListener{
                 submit.setText("Submit");
             }
             else if(screenSetting == 1){
-                
+                if(guesses.get(currentRowIndex + 3) != null){ //CHANGE THIS
+                    guessSubmit = true;
+                    submit.setVisible(false);
+                }  
             }
         }
 
         repaint();
     }
 
+    public void mouseReleased(MouseEvent e) {}
+ 
+    public void mouseEntered(MouseEvent e) {}
+ 
+    public void mouseExited(MouseEvent e) {}
+ 
+    public void mouseClicked(MouseEvent e) {}
+
+    public void mousePressed(MouseEvent e) {
+        System.out.println("X: " + e.getX() + " Y: " + e.getY());
+        int x = e.getX();
+        int y = e.getY();
+        if(x > 460 && x < 690 && y > 65 && y < 115){
+            int c = (x-460)/40;
+            System.out.println(c);
+            currentColor = colorPalette.get(c);
+        }
+        else if(x > 65 && x < 275 && y > 75 && y < 500){
+            int tempX = (x-65)/30;
+            int c = 0;
+            if(tempX % 2 == 0){
+                System.out.println(tempX/2);
+                c = (tempX/2);
+            }
+
+            int tempY = (y - 75)/50;
+
+            int index = tempY * 4 + c;
+
+            if((y % 50)-tempY <= 0.32){
+                if(index < guesses.size()){
+                    guesses.set(index, currentColor);
+                }
+                else{
+                    for(int i = guesses.size(); i <= index; i ++){
+                        guesses.add(null);
+                    }
+                    guesses.set(index, currentColor);
+                }
+            }
+
+            System.out.println("tempX: " + tempX);
+            System.out.println("c: " + c);
+            System.out.println("tempY: " + tempY);
+            System.out.println(index);
+        }
+
+        repaint();
+    }
 }
