@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.net.*;
+import javax.swing.ImageIcon;
 
 public class ServerScreen extends JPanel implements ActionListener{
     //   private JTextArea textArea;
@@ -24,6 +25,7 @@ public class ServerScreen extends JPanel implements ActionListener{
     private String hostName;
     private int portNumber;
     private boolean feedbackSubmit;
+    private int screenSetting;
 
     public ServerScreen() {
         setLayout(null);
@@ -31,17 +33,17 @@ public class ServerScreen extends JPanel implements ActionListener{
 
         hostName = "localhost";
         portNumber = 1024;
+        screenSetting = 0;
 
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
         code = new DLList<Color>();
         feedbackSubmit = false;
 
-        submit = new JButton("Submit");
-		submit.setBounds(550, 400, 100, 40);
+        submit = new JButton("Start Game");
+		submit.setBounds(350, 500, 100, 40);
 		submit.addActionListener(this);
 		add(submit);
-		submit.setVisible(false);
 
         // messages = "";
         // toSend = false;
@@ -76,66 +78,76 @@ public class ServerScreen extends JPanel implements ActionListener{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int x = 100;
-        int y = 75;
+        if(screenSetting == 0){//instructions
 
-        g.drawRoundRect(x, y, 300, 500, 20, 20);
-        g.drawRoundRect(x + 50, y - 50, 200, 50, 20, 20);
-
-        //circles for code
-        code.reset();
-        Color cColor = code.next();
-        for(int c = 0; c < 200; c += 50){
-            if(cColor != null){
-                g.setColor(cColor);
-                g.fillOval(x + 60 + c, y - 40, 30, 30);
-                cColor = code.next();
-            }
-            else{
-                g.drawOval(x + 60 + c, y - 40, 30, 30);
-            }
         }
+        else if(screenSetting == 1){//choosing code
 
-        for(int i = 50; i < 500; i += 50){
-            g.drawLine(x, y + i, x + 300, y + i);
         }
+        else if(screenSetting == 2){//regular screen
+            int x = 100;
+            int y = 75;
 
-        g.drawLine(x + 240, y, x + 240, y + 500);
+            g.drawRoundRect(x, y, 300, 500, 20, 20);
+            g.drawRoundRect(x + 50, y - 50, 200, 50, 20, 20);
 
-        guesses.reset();
-        Color color = guesses.next();
-        //drawing the guess circles
-        for(int r = 0; r < 500; r += 50){
-            for(int c = 0; c < 240; c += 60){
-                if(color != null){
-                    g.setColor(color);
-                    g.fillOval(c+ x + 10, r + y + 10, 30, 30);
-                    color = guesses.next();
+            //circles for code
+            code.reset();
+            Color cColor = code.next();
+            for(int c = 0; c < 200; c += 50){
+                if(cColor != null){
+                    g.setColor(cColor);
+                    g.fillOval(x + 60 + c, y - 40, 30, 30);
+                    cColor = code.next();
                 }
                 else{
-                    g.drawOval(c+ x + 10, r + y + 10, 30, 30);
+                    g.drawOval(x + 60 + c, y - 40, 30, 30);
                 }
+            }
 
-                
+            for(int i = 50; i < 500; i += 50){
+                g.drawLine(x, y + i, x + 300, y + i);
+            }
+
+            g.drawLine(x + 240, y, x + 240, y + 500);
+
+            guesses.reset();
+            Color color = guesses.next();
+            //drawing the guess circles
+            for(int r = 0; r < 500; r += 50){
+                for(int c = 0; c < 240; c += 60){
+                    if(color != null){
+                        g.setColor(color);
+                        g.fillOval(c+ x + 10, r + y + 10, 30, 30);
+                        color = guesses.next();
+                    }
+                    else{
+                        g.drawOval(c+ x + 10, r + y + 10, 30, 30);
+                    }
+
+                    
+                }
+            }
+
+            //drawing the feedback circles
+            feedback.reset();
+            Color fColor = feedback.next();
+
+            for(int r = 0; r < 500; r += 25){
+                for(int c = 0; c < 60; c += 30){
+                    if(fColor != null){
+                        g.setColor(fColor);
+                        g.fillOval(c + x + 250, r + y + 10, 10, 10);
+                        fColor = feedback.next();
+                    }
+                    else{
+                        g.drawOval(c + x + 250, r + y + 10, 10, 10);
+                    }
+                }
             }
         }
 
-        //drawing the feedback circles
-        feedback.reset();
-        Color fColor = feedback.next();
-
-        for(int r = 0; r < 500; r += 25){
-            for(int c = 0; c < 60; c += 30){
-                if(fColor != null){
-                    g.setColor(fColor);
-                    g.fillOval(c + x + 250, r + y + 10, 10, 10);
-                    fColor = feedback.next();
-                }
-                else{
-                    g.drawOval(c + x + 250, r + y + 10, 10, 10);
-                }
-            }
-        }
+        
     }
 
     public void poll() throws IOException, UnknownHostException {
@@ -199,8 +211,20 @@ public class ServerScreen extends JPanel implements ActionListener{
 
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == submit){
-            feedbackSubmit = true;
-            submit.setVisible(false);
+            if(screenSetting == 0){
+                screenSetting ++;
+                submit.setText("Submit");
+            }
+            else if(screenSetting == 1){
+                screenSetting ++;
+                submit.setBounds(550, 400, 100, 40);
+            }
+            else if(screenSetting == 2){
+                feedbackSubmit = true;
+                submit.setVisible(false);
+            }
         }
+
+        repaint();
     }
 }

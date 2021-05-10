@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.net.Socket;
+import javax.swing.ImageIcon;
 
 public class ClientScreen extends JPanel implements ActionListener{
     // private JTextArea textArea;
@@ -20,7 +21,7 @@ public class ClientScreen extends JPanel implements ActionListener{
 
     private DLList<Color> guesses;
     private DLList<Color> feedback;
-    private DLList<Color> colorPallete;
+    private DLList<Color> colorPalette;
     private JButton submit;
     private boolean guessSubmit;
     private Color yellow;
@@ -29,12 +30,14 @@ public class ClientScreen extends JPanel implements ActionListener{
     private Color pink;
     private Color blue;
     private Color brown;
+    private int screenSetting;
 
     public ClientScreen() {
         setLayout(null);
         this.setFocusable(true);
         
         guessSubmit = false;
+        screenSetting = 0;
 
         yellow = new Color(245, 215, 161);
         teal = new Color(155, 194,189);
@@ -45,20 +48,19 @@ public class ClientScreen extends JPanel implements ActionListener{
 
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
-        colorPallete = new DLList<Color>();
+        colorPalette = new DLList<Color>();
 
-        colorPallete.add(yellow);
-        colorPallete.add(orange);
-        colorPallete.add(pink);
-        colorPallete.add(brown);
-        colorPallete.add(blue);
-        colorPallete.add(teal);
+        colorPalette.add(yellow);
+        colorPalette.add(orange);
+        colorPalette.add(pink);
+        colorPalette.add(brown);
+        colorPalette.add(blue);
+        colorPalette.add(teal);
 
-        submit = new JButton("Submit");
-		submit.setBounds(550, 400, 100, 40);
+        submit = new JButton("Start Game");
+		submit.setBounds(350, 500, 100, 40);
 		submit.addActionListener(this);
 		add(submit);
-		submit.setVisible(false);
 
         // messages = "";
         // toSend = false;
@@ -90,67 +92,75 @@ public class ClientScreen extends JPanel implements ActionListener{
     }
 
     public void paintComponent(Graphics g){
-        int x = 50;
-        int y = 75;
 
-        g.drawRoundRect(x, y, 300, 500, 20, 20);
+        if(screenSetting == 0){ //instructions
 
-        for(int i = 50; i < 500; i += 50){
-            g.drawLine(x, y + i, x + 300, y + i);
         }
+        else if(screenSetting == 1){ //regular screen
+            int x = 50;
+            int y = 75;
 
-        g.drawLine(x + 240, y, x + 240, y + 500);
+            g.drawRoundRect(x, y, 300, 500, 20, 20);
 
-        guesses.reset();
-        Color color = guesses.next();
-        //drawing the guess circles
-        for(int r = 0; r < 500; r += 50){
-            for(int c = 0; c < 240; c += 60){
-                if(color != null){
-                    g.setColor(color);
-                    g.fillOval(c+ x + 10, r + y + 10, 30, 30);
-                    color = guesses.next();
-                }
-                else{
-                    g.drawOval(c+ x + 10, r + y + 10, 30, 30);
-                }
-
-                
+            for(int i = 50; i < 500; i += 50){
+                g.drawLine(x, y + i, x + 300, y + i);
             }
-        }
 
-        //drawing the feedback circles
-        feedback.reset();
-        Color fColor = feedback.next();
+            g.drawLine(x + 240, y, x + 240, y + 500);
 
-        for(int r = 0; r < 500; r += 25){
-            for(int c = 0; c < 60; c += 30){
-                if(fColor != null){
-                    g.setColor(fColor);
-                    g.fillOval(c + x + 250, r + y + 10, 10, 10);
-                    fColor = feedback.next();
-                }
-                else{
-                    g.drawOval(c + x + 250, r + y + 10, 10, 10);
+            guesses.reset();
+            Color color = guesses.next();
+            //drawing the guess circles
+            for(int r = 0; r < 500; r += 50){
+                for(int c = 0; c < 240; c += 60){
+                    if(color != null){
+                        g.setColor(color);
+                        g.fillOval(c+ x + 10, r + y + 10, 30, 30);
+                        color = guesses.next();
+                    }
+                    else{
+                        g.drawOval(c+ x + 10, r + y + 10, 30, 30);
+                    }
+
+                    
                 }
             }
-        }
 
-        //drawing the color pallete
-        g.drawRoundRect(x + 400, y, 250, 50, 20, 20);
+            //drawing the feedback circles
+            feedback.reset();
+            Color fColor = feedback.next();
+
+            for(int r = 0; r < 500; r += 25){
+                for(int c = 0; c < 60; c += 30){
+                    if(fColor != null){
+                        g.setColor(fColor);
+                        g.fillOval(c + x + 250, r + y + 10, 10, 10);
+                        fColor = feedback.next();
+                    }
+                    else{
+                        g.drawOval(c + x + 250, r + y + 10, 10, 10);
+                    }
+                }
+            }
+
+            //drawing the color palette
+            g.setColor(Color.BLACK);
+            g.fillRoundRect(x + 400, y, 250, 50, 20, 20);
+            
+            colorPalette.reset();
+            Color pColor = colorPalette.next();
+            for(int c = 0; c < 240; c += 40){
+                if(pColor != null){
+                    g.setColor(pColor);
+                    g.fillOval(x + 410 + c, y + 10, 30, 30);
+                    pColor = colorPalette.next();
+                }
+                else{
+                    g.drawOval(x + 410 + c, y + 10, 30, 30);
+                }
+            }
+        }
         
-        colorPallete.reset();
-        Color pColor = colorPallete.next();
-        for(int c = 0; c < 240; c += 40){
-            if(pColor != null){
-                g.setColor(pColor);
-                g.fillOval(x + 410 + c, y + 10, 30, 30);
-                pColor = colorPallete.next();
-            }
-            else{
-                g.drawOval(x + 410 + c, y + 10, 30, 30);
-            }
-        }
     }
 
 
@@ -222,7 +232,18 @@ public class ClientScreen extends JPanel implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent e){
+        if(e.getSource() == submit){
+            if(screenSetting == 0){
+                submit.setBounds(550, 400, 100, 40);
+                screenSetting ++;
+                submit.setText("Submit");
+            }
+            else if(screenSetting == 1){
+                
+            }
+        }
 
+        repaint();
     }
 
 }
