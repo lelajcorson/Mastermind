@@ -122,10 +122,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 for(int c = 0; c < 240; c += 60){
                     if(color != null){
                         g.setColor(color);
+                        System.out.println(color);
                         g.fillOval(c + x + 15, r + y + 10, 30, 30);
                         color = guesses.next();
                     }
                     else{
+                        g.setColor(Color.BLACK);
                         g.drawOval(c+ x + 15, r + y + 10, 30, 30);
                     }
 
@@ -285,7 +287,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
             int index = tempY * 4 + c;
 
-            if((y % 50)-tempY <= 0.32){
+            System.out.println("Is it gonna go? " + ((y / 50.0)- (tempY * 1.0)));
+            if((y / 50.0)- (tempY * 1.0) <= 2.32){
                 if(index < guesses.size()){
                     guesses.set(index, currentColor);
                 }
@@ -297,10 +300,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
             }
 
-            System.out.println("tempX: " + tempX);
-            System.out.println("c: " + c);
-            System.out.println("tempY: " + tempY);
-            System.out.println(index);
+            // System.out.println("tempX: " + tempX);
+            // System.out.println("c: " + c);
+            // System.out.println("tempY: " + tempY);
+            // System.out.println(index);
         }
 
         repaint();
