@@ -5,6 +5,7 @@ public class DLList<E> implements Serializable{
     private Node<E> tail;
     private int size;
     private Node<E> tracker;
+    private boolean reset;
 
     public DLList(){
         size = 0;
@@ -16,6 +17,7 @@ public class DLList<E> implements Serializable{
         tail.setPrev(head);
 
         tracker = null;
+        reset = true;
     }
 
     public void add(E data){
@@ -32,17 +34,24 @@ public class DLList<E> implements Serializable{
     }
 
     public E next(){
-        if(tracker == null){
+        if(reset == true){
             tracker = head.next();
+            reset = false;
             return tracker.get();
         }
         
-        tracker = tracker.next();
-        return tracker.get();
+        
+        if(tracker != null && tracker.next() != null){
+            tracker = tracker.next();
+            System.out.println("tracker: " + tracker);
+            return tracker.get();
+        }
+
+        return null;
     }
 
     public void reset(){
-        tracker = null;
+        reset = true;
     }
 
     public E get(int loc){
