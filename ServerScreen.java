@@ -69,10 +69,10 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         colorPalette.add(blue);
         colorPalette.add(teal);
 
-        code.add(null);
-        code.add(null);
-        code.add(null);
-        code.add(null);
+        code.add(new Color(242, 242, 242));
+        code.add(new Color(242, 242, 242));
+        code.add(new Color(242, 242, 242));
+        code.add(new Color(242, 242, 242));
 
         submit = new JButton("Submit");
 		submit.setBounds(550, 400, 100, 40);
@@ -162,6 +162,8 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 }
             }
 
+            g.setColor(Color.BLACK);
+
             for(int i = 50; i < 500; i += 50){
                 g.drawLine(x, y + i, x + 300, y + i);
             }
@@ -170,6 +172,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 
             guesses.reset();
             Color color = guesses.next();
+            g.setColor(Color.BLACK);
             //drawing the guess circles
             for(int r = 0; r < 500; r += 50){
                 for(int c = 0; c < 240; c += 60){
@@ -277,7 +280,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         int y = e.getY();
         
         if(screenSetting == 1){
-            if(x > 410 && x < 640 && y > 165 && y < 215){
+            if(x > 410 && x < 690 && y > 165 && y < 215){
                 int c = (x-460)/40;
                 currentColor = colorPalette.get(c);
             }
