@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.net.*;
 import javax.swing.ImageIcon;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 
-public class ServerScreen extends JPanel implements ActionListener{
+public class ServerScreen extends JPanel implements ActionListener, MouseListener{
     //   private JTextArea textArea;
     //   private JButton send;
     //   private JTextField textfield;
@@ -29,18 +31,23 @@ public class ServerScreen extends JPanel implements ActionListener{
     private Color blue;
     private Color brown;
     private JButton submit;
+    private JButton startGame;
+    private JButton chooseCode;
     private String hostName;
     private int portNumber;
     private boolean feedbackSubmit;
     private int screenSetting;
+    private Color currentColor;
 
     public ServerScreen() {
         setLayout(null);
         this.setFocusable(true);
+        addMouseListener(this);
 
         hostName = "localhost";
         portNumber = 1024;
         screenSetting = 0;
+        currentColor = null;
 
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
@@ -62,10 +69,27 @@ public class ServerScreen extends JPanel implements ActionListener{
         colorPalette.add(blue);
         colorPalette.add(teal);
 
-        submit = new JButton("Start Game");
-		submit.setBounds(350, 500, 100, 40);
+        code.add(null);
+        code.add(null);
+        code.add(null);
+        code.add(null);
+
+        submit = new JButton("Submit");
+		submit.setBounds(550, 400, 100, 40);
 		submit.addActionListener(this);
 		add(submit);
+        submit.setVisible(false);
+
+        startGame = new JButton("Start Game");
+		startGame.setBounds(350, 500, 100, 40);
+		startGame.addActionListener(this);
+		add(startGame);
+
+        chooseCode = new JButton("Submit");
+		chooseCode.setBounds(350, 500, 100, 40);
+		chooseCode.addActionListener(this);
+		add(chooseCode);
+        chooseCode.setVisible(false);
     }
 
     public Dimension getPreferredSize() {
@@ -82,21 +106,41 @@ public class ServerScreen extends JPanel implements ActionListener{
 
         }
         else if(screenSetting == 1){//choosing code
+            g.drawString("Choose the Code", 300, 50);
+
             //drawing the color palette
             g.setColor(Color.BLACK);
-            g.fillRoundRect(x + 400, y, 250, 50, 20, 20);
+            g.fillRoundRect(x + 350, y + 100, 250, 50, 20, 20);
             
             colorPalette.reset();
             Color pColor = colorPalette.next();
             for(int c = 0; c < 240; c += 40){
                 if(pColor != null){
                     g.setColor(pColor);
-                    g.fillOval(x + 410 + c, y + 10, 30, 30);
+                    g.fillOval(x + 360 + c, y + 110, 30, 30);
                     pColor = colorPalette.next();
                 }
                 else{
-                    g.drawOval(x + 410 + c, y + 10, 30, 30);
+                    g.drawOval(x + 360 + c, y + 110, 30, 30);
                     //pColor = colorPalette.next();
+                }
+            }
+
+            //drawing the code slots
+            g.setColor(Color.BLACK);
+            g.fillRoundRect(x, y + 100, 200, 50, 20, 20);
+
+            code.reset();
+            Color cColor = code.next();
+            for(int c = 0; c < 200; c += 50){
+                if(cColor != null){
+                    g.setColor(cColor);
+                    g.fillOval(x + 10 + c, y + 110, 30, 30);
+                    cColor = code.next();
+                }
+                else{
+                    g.setColor(new Color(242, 242, 242));
+                    g.fillOval(x + 10 + c, y + 110, 30, 30);
                 }
             }
         }
@@ -202,17 +246,49 @@ public class ServerScreen extends JPanel implements ActionListener{
 
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == submit){
-            if(screenSetting == 0){
-                screenSetting ++;
-                submit.setText("Submit");
+            screenSetting ++;
+            feedbackSubmit = true;
+            submit.setVisible(false);
+        }
+        else if(e.getSource() == startGame){
+            screenSetting ++;
+            startGame.setVisible(false);
+            chooseCode.setVisible(true);
+        }
+        else if(e.getSource() == chooseCode){
+            screenSetting ++;
+            chooseCode.setVisible(false);
+        }
+
+        repaint();
+    }
+
+    public void mouseReleased(MouseEvent e) {}
+ 
+    public void mouseEntered(MouseEvent e) {}
+ 
+    public void mouseExited(MouseEvent e) {}
+ 
+    public void mouseClicked(MouseEvent e) {}
+
+    public void mousePressed(MouseEvent e) {
+        System.out.println("X: " + e.getX() + " Y: " + e.getY());
+        int x = e.getX();
+        int y = e.getY();
+        
+        if(screenSetting == 1){
+            if(x > 410 && x < 640 && y > 165 && y < 215){
+                int c = (x-460)/40;
+                currentColor = colorPalette.get(c);
             }
-            else if(screenSetting == 1){
-                screenSetting ++;
-                submit.setBounds(550, 400, 100, 40);
-            }
-            else if(screenSetting == 2){
-                feedbackSubmit = true;
-                submit.setVisible(false);
+            else if(x > 100 && x < 300 && y > 175 && y < 225){
+                int c = (x-110)/50;
+                int centerX = 125 + c * 50;
+
+                if(x - centerX < 15){
+                    code.set(c, currentColor);
+                }
+
             }
         }
 

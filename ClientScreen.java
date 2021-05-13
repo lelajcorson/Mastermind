@@ -231,19 +231,19 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         }
         else if(x > 65 && x < 275 && y > 75 && y < 500){
             int tempX = (x-65)/30;
-            int r = 0;
+            int c = 0;
             if(tempX % 2 == 0){
-                r = (tempX/2);
+                c = (tempX/2);
             }
 
-            int c = (y - 75)/50;
+            int r = (y - 75)/50;
 
-            int index = c * 4 + r;
+            int index = r * 4 + c;
 
             System.out.println("R: " + r + "C: " + c);
 
-            int centerX = 80 + 60 * r;
-            int centerY = 100 + 50 * c;
+            int centerX = 80 + 60 * c;
+            int centerY = 100 + 50 * r;
 
             if(x - centerX < 15 && y - centerY < 15 && y > 85 + 50 * guessNumber && y < 115 + 50 * guessNumber){
                 if(index < guesses.size()){
