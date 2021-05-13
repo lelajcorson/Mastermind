@@ -43,7 +43,7 @@ public class DLList<E> implements Serializable{
         
         if(tracker != null && tracker.next() != null){
             tracker = tracker.next();
-            System.out.println("tracker: " + tracker);
+            //System.out.println("tracker: " + tracker);
             return tracker.get();
         }
 

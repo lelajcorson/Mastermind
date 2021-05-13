@@ -1,5 +1,6 @@
--draw the place to choose colors for client
 -write the rules on the home screen
--start playing button
 -choosing code infrastructure for server
--figure out what data structure to use (DLList)
+	-fix the algorithm
+	-make them only able to put colors in the next row
+-code choosing for server
+-feedback giving for server

@@ -21,6 +21,13 @@ public class ServerScreen extends JPanel implements ActionListener{
     private DLList<Color> guesses;
     private DLList<Color> feedback;
     private DLList<Color> code;
+    private DLList<Color> colorPalette;
+    private Color yellow;
+    private Color teal;
+    private Color orange;
+    private Color pink;
+    private Color blue;
+    private Color brown;
     private JButton submit;
     private String hostName;
     private int portNumber;
@@ -38,7 +45,22 @@ public class ServerScreen extends JPanel implements ActionListener{
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
         code = new DLList<Color>();
+        colorPalette = new DLList<Color>();
         feedbackSubmit = false;
+
+        yellow = new Color(245, 215, 161);
+        teal = new Color(155, 194,189);
+        orange = new Color(240, 162, 142);
+        pink = new Color(186, 99, 117);
+        blue = new Color(0, 75, 90);
+        brown = new Color(136, 59, 31);
+
+        colorPalette.add(yellow);
+        colorPalette.add(orange);
+        colorPalette.add(pink);
+        colorPalette.add(brown);
+        colorPalette.add(blue);
+        colorPalette.add(teal);
 
         submit = new JButton("Start Game");
 		submit.setBounds(350, 500, 100, 40);
@@ -78,16 +100,32 @@ public class ServerScreen extends JPanel implements ActionListener{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        int x = 100;
+        int y = 75;
+
         if(screenSetting == 0){//instructions
 
         }
         else if(screenSetting == 1){//choosing code
-
+            //drawing the color palette
+            g.setColor(Color.BLACK);
+            g.fillRoundRect(x + 400, y, 250, 50, 20, 20);
+            
+            colorPalette.reset();
+            Color pColor = colorPalette.next();
+            for(int c = 0; c < 240; c += 40){
+                if(pColor != null){
+                    g.setColor(pColor);
+                    g.fillOval(x + 410 + c, y + 10, 30, 30);
+                    pColor = colorPalette.next();
+                }
+                else{
+                    g.drawOval(x + 410 + c, y + 10, 30, 30);
+                    //pColor = colorPalette.next();
+                }
+            }
         }
         else if(screenSetting == 2){//regular screen
-            int x = 100;
-            int y = 75;
-
             g.drawRoundRect(x, y, 300, 500, 20, 20);
             g.drawRoundRect(x + 50, y - 50, 200, 50, 20, 20);
 

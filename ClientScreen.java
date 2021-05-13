@@ -35,6 +35,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private int screenSetting;
     private int currentRowIndex;
     private Color currentColor;
+    private int guessNumber;
 
     public ClientScreen() {
         setLayout(null);
@@ -45,6 +46,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         screenSetting = 0;
         currentRowIndex = 0;
         currentColor = null;
+        guessNumber = 0;
 
         yellow = new Color(245, 215, 161);
         teal = new Color(155, 194,189);
@@ -118,11 +120,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             guesses.reset();
             Color color = guesses.next();
 
-            System.out.println("DLList: " + guesses);
+            //System.out.println("DLList: " + guesses);
             //drawing the guess circles
             for(int r = 0; r < 500; r += 50){
                 for(int c = 0; c < 240; c += 60){
-                    System.out.println(color);
+                    //System.out.println(color);
                     if(color != null){
                         g.setColor(color);
                         g.fillOval(c + x + 15, r + y + 10, 30, 30);
@@ -280,16 +282,21 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         }
         else if(x > 65 && x < 275 && y > 75 && y < 500){
             int tempX = (x-65)/30;
-            int c = 0;
+            int r = 0;
             if(tempX % 2 == 0){
-                c = (tempX/2);
+                r = (tempX/2);
             }
 
-            int tempY = (y - 75)/50;
+            int c = (y - 75)/50;
 
-            int index = tempY * 4 + c;
+            int index = c * 4 + r;
 
-            if((y / 50.0)- (tempY * 1.0) <= 2.32){
+            System.out.println("R: " + r + "C: " + c);
+
+            int centerX = 80 + 60 * r;
+            int centerY = 100 + 50 * c;
+
+            if(x - centerX < 15 && y - centerY < 15 && y > 85 + 50 * guessNumber && y < 115 + 50 * guessNumber){
                 if(index < guesses.size()){
                     guesses.set(index, currentColor);
                 }
@@ -301,6 +308,20 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     guesses.set(index, currentColor);
                 }
             }
+
+            // //need to fix this for the further down rows
+            // if((y / 50.0)- (tempY * 1.0) <= 2.32){
+            //     if(index < guesses.size()){
+            //         guesses.set(index, currentColor);
+            //     }
+            //     else{
+            //         for(int i = guesses.size(); i <= index; i ++){
+            //             guesses.add(null);
+            //         }
+            //         System.out.println("added");
+            //         guesses.set(index, currentColor);
+            //     }
+            // }
 
             // System.out.println("tempX: " + tempX);
             // System.out.println("c: " + c);
