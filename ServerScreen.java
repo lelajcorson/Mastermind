@@ -191,9 +191,10 @@ public class ServerScreen extends JPanel implements ActionListener{
     public void poll() throws IOException, UnknownHostException {
         ServerSocket sSocket = new ServerSocket(portNumber);
         Socket cSocket = sSocket.accept();
-        PushbackInputStream pin = new PushbackInputStream(cSocket.getInputStream());
         ObjectOutputStream out = new ObjectOutputStream(cSocket.getOutputStream());
+        System.out.println("opened");
         ObjectInputStream in = new ObjectInputStream(cSocket.getInputStream());
+        PushbackInputStream pin = new PushbackInputStream(cSocket.getInputStream());
 
         try {
             while(true){
@@ -207,6 +208,7 @@ public class ServerScreen extends JPanel implements ActionListener{
                     DLList inputList = (DLList)in.readObject();
 
                     guesses = inputList;
+                    System.out.println("sent");
                 }
 
             repaint();

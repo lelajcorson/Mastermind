@@ -25,6 +25,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private DLList<Color> feedback;
     private DLList<Color> colorPalette;
     private JButton submit;
+    private JButton startGame;
     private boolean guessSubmit;
     private Color yellow;
     private Color teal;
@@ -66,10 +67,16 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         colorPalette.add(blue);
         colorPalette.add(teal);
 
-        submit = new JButton("Start Game");
-		submit.setBounds(350, 500, 100, 40);
+        startGame = new JButton("Start Game");
+        startGame.setBounds(350, 500, 100, 40);
+		startGame.addActionListener(this);
+		add(startGame);
+
+        submit = new JButton("Submit");
+		submit.setBounds(550, 400, 100, 40);
 		submit.addActionListener(this);
 		add(submit);
+        submit.setVisible(false);
 
         // messages = "";
         // toSend = false;
@@ -183,23 +190,24 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         String hostName = "localhost"; 
         int portNumber = 1024;
 
+        Socket sSocket = new Socket(hostName, portNumber);
+        PushbackInputStream pin = new PushbackInputStream(sSocket.getInputStream());
+        ObjectOutputStream out = new ObjectOutputStream(sSocket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(sSocket.getInputStream());
+
         try {
 
-            Socket sSocket = new Socket(hostName, portNumber);
-
             while(true){
-                PushbackInputStream pin = new PushbackInputStream(sSocket.getInputStream());
-                ObjectOutputStream out = new ObjectOutputStream(sSocket.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(sSocket.getInputStream());
-
-
                 if(pin.available() != 0){
                     DLList inputList = (DLList)in.readObject();
 
                     feedback = inputList;
                 }
                 else if(guessSubmit){
+                    out.reset();
+                    out.writeObject(guesses);
 
+                    guessSubmit = false;
                 }
             }
         }catch (UnknownHostException e) {
@@ -247,18 +255,16 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public void actionPerformed(ActionEvent e){
-        if(e.getSource() == submit){
-            if(screenSetting == 0){
-                submit.setBounds(550, 400, 100, 40);
-                screenSetting ++;
-                submit.setText("Submit");
-            }
-            else if(screenSetting == 1){
-                if(guesses.get(currentRowIndex + 3) != null){ //CHANGE THIS
-                    guessSubmit = true;
-                    submit.setVisible(false);
-                }  
-            }
+        if(e.getSource() == startGame){
+            screenSetting ++;
+            startGame.setVisible(false);
+            submit.setVisible(true);
+        }
+        else if(e.getSource() == submit){
+            if(guesses.get(currentRowIndex + 3) != null){
+                guessSubmit = true;
+                submit.setVisible(false);
+            }  
         }
 
         repaint();
@@ -308,20 +314,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     guesses.set(index, currentColor);
                 }
             }
-
-            // //need to fix this for the further down rows
-            // if((y / 50.0)- (tempY * 1.0) <= 2.32){
-            //     if(index < guesses.size()){
-            //         guesses.set(index, currentColor);
-            //     }
-            //     else{
-            //         for(int i = guesses.size(); i <= index; i ++){
-            //             guesses.add(null);
-            //         }
-            //         System.out.println("added");
-            //         guesses.set(index, currentColor);
-            //     }
-            // }
 
             // System.out.println("tempX: " + tempX);
             // System.out.println("c: " + c);

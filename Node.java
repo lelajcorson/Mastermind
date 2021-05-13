@@ -1,4 +1,6 @@
-public class Node<E>{
+import java.io.Serializable;
+
+public class Node<E> implements Serializable{
     private E data;
     private Node<E> next;
     private Node<E> prev;
