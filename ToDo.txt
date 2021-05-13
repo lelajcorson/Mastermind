@@ -1,6 +1,2 @@
 -write the rules on the home screen
--choosing code infrastructure for server
-	-fix the algorithm
-	-make them only able to put colors in the next row
--code choosing for server
 -feedback giving for server

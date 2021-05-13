@@ -13,14 +13,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 
 public class ClientScreen extends JPanel implements ActionListener, MouseListener{
-    // private JTextArea textArea;
-    // private JButton send;
-    // private JTextField textfield;
-    // private JScrollPane scrollPane;
-    // private String sendText;
-    // private String messages;
-    // private boolean toSend;
-
     private DLList<Color> guesses;
     private DLList<Color> feedback;
     private DLList<Color> colorPalette;
@@ -37,6 +29,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private int currentRowIndex;
     private Color currentColor;
     private int guessNumber;
+    //private ImageIcon rules;
 
     public ClientScreen() {
         setLayout(null);
@@ -48,6 +41,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         currentRowIndex = 0;
         currentColor = null;
         guessNumber = 0;
+        //rules = new ImageIcon("Images/clientRules.PNG");
 
         yellow = new Color(245, 215, 161);
         teal = new Color(155, 194,189);
@@ -86,7 +80,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void paintComponent(Graphics g){
 
         if(screenSetting == 0){ //instructions
-
+            //rules.paintIcon(this, g, 0, 0);
         }
         else if(screenSetting == 1){ //regular screen
             int x = 50;

@@ -12,14 +12,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 
 public class ServerScreen extends JPanel implements ActionListener, MouseListener{
-    //   private JTextArea textArea;
-    //   private JButton send;
-    //   private JTextField textfield;
-    //   private JScrollPane scrollPane;
-    //   private String sendText;
-    //   private String messages;
-    //   private boolean toSend;
-
     private DLList<Color> guesses;
     private DLList<Color> feedback;
     private DLList<Color> code;
@@ -38,6 +30,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
     private boolean feedbackSubmit;
     private int screenSetting;
     private Color currentColor;
+    //private ImageIcon rules;
 
     public ServerScreen() {
         setLayout(null);
@@ -48,6 +41,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         portNumber = 1024;
         screenSetting = 0;
         currentColor = null;
+        //rules = new ImageIcon("Images/serverRules.PNG");
 
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
@@ -103,7 +97,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         int y = 75;
 
         if(screenSetting == 0){//instructions
-
+           // rules.paintIcon(this, g, 0, 0);
         }
         else if(screenSetting == 1){//choosing code
             g.drawString("Choose the Code", 300, 50);
@@ -259,8 +253,18 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
             chooseCode.setVisible(true);
         }
         else if(e.getSource() == chooseCode){
-            screenSetting ++;
-            chooseCode.setVisible(false);
+            boolean go = true;
+            for(int i = 0; i < code.size(); i ++){
+                if(code.get(i).equals(new Color(242, 242, 242))){
+                    go = false;
+                }
+            }
+
+            if(go){
+                screenSetting ++;
+                chooseCode.setVisible(false);
+            }
+            
         }
 
         repaint();
