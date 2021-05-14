@@ -29,6 +29,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private int currentRowIndex;
     private Color currentColor;
     private int guessNumber;
+    private Font f;
     //private ImageIcon rules;
 
     public ClientScreen() {
@@ -41,6 +42,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         currentRowIndex = 0;
         currentColor = null;
         guessNumber = 0;
+        f = new Font("Courier", Font.BOLD, 22);
         //rules = new ImageIcon("Images/clientRules.PNG");
 
         yellow = new Color(245, 215, 161);
@@ -67,7 +69,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 		add(startGame);
 
         submit = new JButton("Submit");
-		submit.setBounds(550, 400, 100, 40);
+		submit.setBounds(525, 400, 100, 40);
 		submit.addActionListener(this);
 		add(submit);
         submit.setVisible(false);
@@ -86,6 +88,16 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             int x = 50;
             int y = 75;
 
+            int stringX = x - 15;
+            int stringY = y + 20;
+
+            g.setFont(f);
+            g.drawString("Enter your guess by clicking", stringX + 350, stringY + 100);
+            g.drawString("on the colors from the color", stringX + 350, stringY + 125);
+            g.drawString("pallete and then clicking on", stringX + 350, stringY + 150);
+            g.drawString("the circles in the first row", stringX + 350, stringY + 175);
+            g.drawString("of the guess board. When you", stringX + 350, stringY + 200);
+            g.drawString("are ready, hit submit.", stringX + 350, stringY + 225);
             g.drawRoundRect(x, y, 300, 500, 20, 20);
 
             for(int i = 50; i < 500; i += 50){
@@ -198,7 +210,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             submit.setVisible(true);
         }
         else if(e.getSource() == submit){
-            if(guesses.get(currentRowIndex + 3) != null){
+            if(guesses.size() != 0 && guesses.get(currentRowIndex + 3) != null){
                 guessSubmit = true;
                 submit.setVisible(false);
             }  
