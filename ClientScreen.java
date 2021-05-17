@@ -80,6 +80,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public void paintComponent(Graphics g){
+        super.paintComponent(g);
+
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 800, 600);
+
+        g.setColor(Color.BLACK);
 
         if(screenSetting == 0){ //instructions
             //rules.paintIcon(this, g, 0, 0);
@@ -190,6 +196,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     out.writeObject(guesses);
 
                     guessSubmit = false;
+
+                    submit.setVisible(false);
                 }
             }
         }catch (UnknownHostException e) {
@@ -213,6 +221,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             if(guesses.size() != 0 && guesses.get(currentRowIndex + 3) != null){
                 guessSubmit = true;
                 submit.setVisible(false);
+                System.out.println("false");
             }  
         }
 

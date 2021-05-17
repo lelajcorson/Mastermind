@@ -93,6 +93,10 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 800, 600);
+        g.setColor(Color.BLACK);
+
         int x = 100;
         int y = 75;
 
@@ -176,6 +180,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                         color = guesses.next();
                     }
                     else{
+                        g.setColor(Color.BLACK);
                         g.drawOval(c+ x + 10, r + y + 10, 30, 30);
                     }
 
@@ -195,6 +200,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                         fColor = feedback.next();
                     }
                     else{
+                        g.setColor(Color.BLACK);
                         g.drawOval(c + x + 250, r + y + 10, 10, 10);
                     }
                 }
@@ -263,8 +269,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
             if(go){
                 screenSetting ++;
                 chooseCode.setVisible(false);
-            }
-            
+            }            
         }
 
         repaint();
