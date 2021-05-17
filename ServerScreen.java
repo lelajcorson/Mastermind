@@ -16,6 +16,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
     private DLList<Color> feedback;
     private DLList<Color> code;
     private DLList<Color> colorPalette;
+    private DLList<Color> feedbackInput;
     private Color yellow;
     private Color teal;
     private Color orange;
@@ -25,11 +26,13 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
     private JButton submit;
     private JButton startGame;
     private JButton chooseCode;
+    private JButton submitFeedback;
     private String hostName;
     private int portNumber;
     private boolean feedbackSubmit;
     private int screenSetting;
     private Color currentColor;
+    private Font f;
     //private ImageIcon rules;
 
     public ServerScreen() {
@@ -41,12 +44,14 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         portNumber = 1024;
         screenSetting = 0;
         currentColor = null;
+        f = new Font("Courier", Font.BOLD, 22);
         //rules = new ImageIcon("Images/serverRules.PNG");
 
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
         code = new DLList<Color>();
         colorPalette = new DLList<Color>();
+        feedbackInput = new DLList<Color>();
         feedbackSubmit = false;
 
         yellow = new Color(245, 215, 161);
@@ -63,6 +68,11 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         colorPalette.add(blue);
         colorPalette.add(teal);
 
+        feedbackInput.add(null);
+        feedbackInput.add(null);
+        feedbackInput.add(null);
+        feedbackInput.add(null);
+
         code.add(new Color(242, 242, 242));
         code.add(new Color(242, 242, 242));
         code.add(new Color(242, 242, 242));
@@ -73,6 +83,12 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 		submit.addActionListener(this);
 		add(submit);
         submit.setVisible(false);
+
+        submitFeedback = new JButton("Submit");
+		submitFeedback.setBounds(550, 430, 100, 40);
+		submitFeedback.addActionListener(this);
+		add(submitFeedback);
+        submitFeedback.setVisible(false);
 
         startGame = new JButton("Start Game");
 		startGame.setBounds(350, 500, 100, 40);
@@ -142,7 +158,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 }
             }
         }
-        else if(screenSetting == 2){//regular screen
+        else if(screenSetting == 2 || screenSetting == 3){//regular screen
             g.drawRoundRect(x, y, 300, 500, 20, 20);
             g.drawRoundRect(x + 50, y - 50, 200, 50, 20, 20);
 
@@ -205,8 +221,41 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     }
                 }
             }
-        }
 
+            if(screenSetting == 3){ //giving feedback
+                g.setFont(f);
+                g.drawString("Enter feedback about the", 440, 100);
+                g.drawString("last guess. Red means one", 440, 125);
+                g.drawString("slot is totally correct,", 440, 150);
+                g.drawString("black means correct color", 440, 175);
+                g.drawString("but wrong location, and", 440, 200);
+                g.drawString("blank means nothing right.", 440, 225);
+                g.drawString("Click to cycle through", 440, 250);
+                g.drawString("the colors.", 440, 275);
+
+
+                g.setColor(Color.BLACK);
+                g.drawRoundRect(x + 450, y + 230, 100, 100, 20, 20);
+
+                //drawing the circles for feedback input
+                feedbackInput.reset();
+                Color fIColor = feedbackInput.next();
+
+                for(int r = 0; r < 100; r += 50){
+                    for(int c = 0; c < 100; c += 50){
+                        if(fIColor != null){
+                            g.setColor(fIColor);
+                            g.fillOval(c + x + 460, r + y + 240, 30, 30);
+                            fIColor = feedback.next();
+                        }
+                        else{
+                            g.setColor(Color.BLACK);
+                            g.drawOval(c + x + 460, r + y + 240, 30, 30);
+                        }
+                    }
+                }
+            }
+        }
         
     }
 
@@ -231,6 +280,8 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 
                     guesses = inputList;
                     System.out.println("sent");
+                    submitFeedback.setVisible(true);
+                    screenSetting = 3;
                 }
 
             repaint();
@@ -271,6 +322,20 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 chooseCode.setVisible(false);
             }            
         }
+        else if(e.getSource() == submitFeedback){
+            boolean go = true;
+            for(int i = 0; i < feedbackInput.size(); i ++){
+                if(feedbackInput.get(i) == null){
+                    go = false;
+                }
+            }
+
+            if(go){
+                screenSetting = 3;
+                feedbackSubmit = true;
+                submitFeedback.setVisible(false);
+            }
+        }
 
         repaint();
     }
@@ -302,6 +367,9 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 }
 
             }
+        }
+        else if(screenSetting == 4){
+        
         }
 
         repaint();
