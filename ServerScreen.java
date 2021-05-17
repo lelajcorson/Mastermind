@@ -68,10 +68,10 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         colorPalette.add(blue);
         colorPalette.add(teal);
 
-        feedbackInput.add(null);
-        feedbackInput.add(null);
-        feedbackInput.add(null);
-        feedbackInput.add(null);
+        feedbackInput.add(Color.WHITE);
+        feedbackInput.add(Color.WHITE);
+        feedbackInput.add(Color.WHITE);
+        feedbackInput.add(Color.WHITE);
 
         code.add(new Color(242, 242, 242));
         code.add(new Color(242, 242, 242));
@@ -244,9 +244,13 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 for(int r = 0; r < 100; r += 50){
                     for(int c = 0; c < 100; c += 50){
                         if(fIColor != null){
+                            if(fIColor == Color.WHITE){
+                                g.setColor(Color.BLACK);
+                                g.drawOval(c + x + 460, r + y + 240, 30, 30);
+                            }
                             g.setColor(fIColor);
                             g.fillOval(c + x + 460, r + y + 240, 30, 30);
-                            fIColor = feedback.next();
+                            fIColor = feedbackInput.next();
                         }
                         else{
                             g.setColor(Color.BLACK);
@@ -368,8 +372,34 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 
             }
         }
-        else if(screenSetting == 4){
-        
+        else if(screenSetting == 3){
+            if(x > 560 && x < 660 && y > 315 && y < 405){
+                int c = (x - 560)/50;
+                int centerX = 575 + c * 50;
+
+                int r = (y - 305) / 50;
+                int centerY = 330 + 50 * r;
+
+                int index = r * 2 + c;
+
+                System.out.println("R: " + r + " C: " + c);
+                System.out.println("CenterX: " + centerX + " CenterY: " + centerY);
+
+                if(x - centerX < 15 && y - centerY < 15){
+                    Color color = feedbackInput.get(index);
+                    if(color == Color.WHITE){
+                        feedbackInput.set(index, Color.RED);
+                    }
+                    else if(color == Color.RED){
+                       feedbackInput.set(index, Color.BLACK); 
+                    }
+                    else if(color == Color.BLACK){
+                       feedbackInput.set(index, Color.WHITE); 
+                    }
+                    //System.out.println(feedbackInput);
+                }
+
+            }
         }
 
         repaint();
