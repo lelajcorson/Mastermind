@@ -212,7 +212,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 if(pin.available() != 0){
                     DLList inputList = (DLList)in.readObject();
 
-                    feedback = inputList;
+                    //feedback = inputList;
+                    for(int i = 0; i < inputList.size(); i ++){
+                        feedback.add((Color)inputList.get(i));
+                        System.out.println(i + " : " + inputList.get(i));
+                    }
                     screenSetting = 3;
                     System.out.println("in");
                     repaint();
@@ -265,7 +269,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void mouseClicked(MouseEvent e) {}
 
     public void mousePressed(MouseEvent e) {
-        System.out.println("X: " + e.getX() + " Y: " + e.getY());
+        //System.out.println("X: " + e.getX() + " Y: " + e.getY());
         int x = e.getX();
         int y = e.getY();
         if(x > 460 && x < 690 && y > 65 && y < 115){
@@ -283,7 +287,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
             int index = r * 4 + c;
 
-            System.out.println("R: " + r + "C: " + c);
+            //System.out.println("R: " + r + "C: " + c);
 
             int centerX = 80 + 60 * c;
             int centerY = 100 + 50 * r;
@@ -296,7 +300,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     for(int i = guesses.size(); i <= index; i ++){
                         guesses.add(null);
                     }
-                    System.out.println("added");
                     guesses.set(index, currentColor);
                 }
             }

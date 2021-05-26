@@ -279,10 +279,14 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
             while(true){
                 if(feedbackSubmit){
                     out.reset();
-                    out.writeObject(feedback);
+                    System.out.println("feedback: " + feedbackInput);
+                    out.writeObject(feedbackInput);
+
+                    for(int i = 0; i < 4; i ++){
+                        feedbackInput.set(i, Color.WHITE);
+                    }
 
                     feedbackSubmit = false;
-                    System.out.println("feedback: " + feedback);
                 }
                 else if(pin.available() != 0){
                     DLList inputList = (DLList)in.readObject();
@@ -338,7 +342,6 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 
             for(int i = 0; i < 4; i ++){
                 feedback.add(feedbackInput.get(i));
-                feedbackInput.set(i, Color.WHITE);
             }
         }
 
