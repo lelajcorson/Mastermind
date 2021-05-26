@@ -107,14 +107,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             }
             else if(screenSetting == 3){
                 g.setFont(f);
-                g.drawString("You've recieved feedback on your", stringX + 350, stringY + 100);
-                g.drawString("guess. A red circle means one of", stringX + 350, stringY + 125);
-                g.drawString("your guesses is in the right place", stringX + 350, stringY + 150);
-                g.drawString("and is the right color. A black circle", stringX + 350, stringY + 175);
-                g.drawString("means one of your guesses is the right", stringX + 350, stringY + 200);
-                g.drawString("color but is in the wrong place.", stringX + 350, stringY + 225);
-                g.drawString("A blank circle means one of your", stringX + 350, stringY + 250);
-                g.drawString("guesses is the wrong color and place.", stringX + 350, stringY + 275);
+                g.drawString("You've recieved feedback on", stringX + 350, stringY + 100);
+                g.drawString("your guess. A red circle means", stringX + 350, stringY + 125);
+                g.drawString("one of your guesses is in", stringX + 350, stringY + 150);
+                g.drawString("the right place and is the ", stringX + 350, stringY + 175);
+                g.drawString("right color. A black circle", stringX + 350, stringY + 200);
+                g.drawString("means one of your guesses is", stringX + 350, stringY + 225);
+                g.drawString("the right color but is in the", stringX + 350, stringY + 250);
+                g.drawString("wrong place. A blank circle", stringX + 350, stringY + 275);
+                g.drawString("means one of your guesses is", stringX + 350, stringY + 300);
+                g.drawString("the wrong color and place.", stringX + 350, stringY + 325);
+
+                
 
             }
 
