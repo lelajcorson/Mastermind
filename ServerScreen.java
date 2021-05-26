@@ -33,6 +33,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
     private int screenSetting;
     private Color currentColor;
     private Font f;
+    private boolean feedbackReset;
     //private ImageIcon rules;
 
     public ServerScreen() {
@@ -45,6 +46,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         screenSetting = 0;
         currentColor = null;
         f = new Font("Courier", Font.BOLD, 22);
+        feedbackReset = false;
         //rules = new ImageIcon("Images/serverRules.PNG");
 
         guesses = new DLList<Color>();
@@ -241,6 +243,15 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 g.setColor(Color.BLACK);
                 g.drawRoundRect(x + 450, y + 230, 100, 100, 20, 20);
 
+                if(feedbackReset){
+                    System.out.println("resetting");
+                    for(int i = 0; i < 4; i ++){
+                        feedbackInput.set(i, Color.WHITE);
+                    }
+
+                    feedbackReset = false;
+                }
+
                 //drawing the circles for feedback input
                 feedbackInput.reset();
                 Color fIColor = feedbackInput.next();
@@ -282,11 +293,9 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     System.out.println("feedback: " + feedbackInput);
                     out.writeObject(feedbackInput);
 
-                    for(int i = 0; i < 4; i ++){
-                        feedbackInput.set(i, Color.WHITE);
-                    }
-
                     feedbackSubmit = false;
+                    feedbackReset = true;
+                    screenSetting = 2;
                 }
                 else if(pin.available() != 0){
                     DLList inputList = (DLList)in.readObject();
@@ -296,7 +305,6 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     submitFeedback.setVisible(true);
                     screenSetting = 3;
                 }
-
             repaint();
           }
         }
@@ -340,7 +348,9 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
             feedbackSubmit = true;
             submitFeedback.setVisible(false);
 
-            for(int i = 0; i < 4; i ++){
+            System.out.println("feedbackInput: " + feedbackInput);
+            for(int i = 0; i < feedbackInput.size(); i ++){
+                System.out.println("adddinggg: " + feedbackInput.get(i));
                 feedback.add(feedbackInput.get(i));
             }
         }
@@ -388,6 +398,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 
                 System.out.println("R: " + r + " C: " + c);
                 System.out.println("CenterX: " + centerX + " CenterY: " + centerY);
+
 
                 if(x - centerX < 15 && y - centerY < 15){
                     Color color = feedbackInput.get(index);

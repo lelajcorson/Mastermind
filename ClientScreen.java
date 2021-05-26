@@ -69,7 +69,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 		add(startGame);
 
         submit = new JButton("Submit");
-		submit.setBounds(525, 400, 100, 40);
+		submit.setBounds(525, 500, 100, 40);
 		submit.addActionListener(this);
 		add(submit);
         submit.setVisible(false);
@@ -117,9 +117,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 g.drawString("wrong place. A blank circle", stringX + 350, stringY + 275);
                 g.drawString("means one of your guesses is", stringX + 350, stringY + 300);
                 g.drawString("the wrong color and place.", stringX + 350, stringY + 325);
-
-                
-
+                g.drawString("Now, make a new guess.", stringX + 350, stringY + 350);
             }
 
             g.drawRoundRect(x, y, 300, 500, 20, 20);
@@ -175,21 +173,24 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
             }
 
-            //drawing the color palette
-            g.setColor(Color.BLACK);
-            g.fillRoundRect(x + 400, y, 250, 50, 20, 20);
-            
-            colorPalette.reset();
-            Color pColor = colorPalette.next();
-            for(int c = 0; c < 240; c += 40){
-                if(pColor != null){
-                    g.setColor(pColor);
-                    g.fillOval(x + 410 + c, y + 10, 30, 30);
-                    pColor = colorPalette.next();
-                }
-                else{
-                    g.drawOval(x + 410 + c, y + 10, 30, 30);
-                    //pColor = colorPalette.next();
+
+            if(screenSetting != 2){
+                //drawing the color palette
+                g.setColor(Color.BLACK);
+                g.fillRoundRect(x + 400, y, 250, 50, 20, 20);
+                
+                colorPalette.reset();
+                Color pColor = colorPalette.next();
+                for(int c = 0; c < 240; c += 40){
+                    if(pColor != null){
+                        g.setColor(pColor);
+                        g.fillOval(x + 410 + c, y + 10, 30, 30);
+                        pColor = colorPalette.next();
+                    }
+                    else{
+                        g.drawOval(x + 410 + c, y + 10, 30, 30);
+                        //pColor = colorPalette.next();
+                    }
                 }
             }
         }
@@ -218,9 +219,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                         System.out.println(i + " : " + inputList.get(i));
                     }
                     screenSetting = 3;
-                    System.out.println("in");
+                    submit.setVisible(true);
+                    guessNumber ++;
                     repaint();
-                    System.out.println("feedback " + feedback);
                 }
                 else if(guessSubmit){
                     out.reset();
