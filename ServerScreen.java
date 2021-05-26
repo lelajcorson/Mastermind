@@ -13,10 +13,10 @@ import java.awt.event.MouseEvent;
 
 public class ServerScreen extends JPanel implements ActionListener, MouseListener{
     private DLList<Color> guesses;
-    private DLList<Color> feedback;
     private DLList<Color> code;
     private DLList<Color> colorPalette;
     private DLList<Color> feedbackInput;
+    private DLList<Color> feedback;
     private Color yellow;
     private Color teal;
     private Color orange;
@@ -48,10 +48,10 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         //rules = new ImageIcon("Images/serverRules.PNG");
 
         guesses = new DLList<Color>();
-        feedback = new DLList<Color>();
         code = new DLList<Color>();
         colorPalette = new DLList<Color>();
         feedbackInput = new DLList<Color>();
+        feedback = new DLList<Color>();
         feedbackSubmit = false;
 
         yellow = new Color(245, 215, 161);
@@ -210,14 +210,18 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 
             for(int r = 0; r < 500; r += 25){
                 for(int c = 0; c < 60; c += 30){
-                    if(fColor != null){
+                    if(fColor == null || fColor.equals(Color.WHITE)){
+                        g.setColor(Color.BLACK);
+                        g.drawOval(c + x + 250, r + y + 10, 10, 10);
+
+                        if(fColor != null && fColor.equals(Color.WHITE)){
+                            fColor = feedback.next();
+                        }
+                    }
+                    else if(fColor != null){
                         g.setColor(fColor);
                         g.fillOval(c + x + 250, r + y + 10, 10, 10);
                         fColor = feedback.next();
-                    }
-                    else{
-                        g.setColor(Color.BLACK);
-                        g.drawOval(c + x + 250, r + y + 10, 10, 10);
                     }
                 }
             }
@@ -278,6 +282,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     out.writeObject(feedback);
 
                     feedbackSubmit = false;
+                    System.out.println("feedback: " + feedback);
                 }
                 else if(pin.available() != 0){
                     DLList inputList = (DLList)in.readObject();
@@ -327,17 +332,13 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
             }            
         }
         else if(e.getSource() == submitFeedback){
-            boolean go = true;
-            for(int i = 0; i < feedbackInput.size(); i ++){
-                if(feedbackInput.get(i) == null){
-                    go = false;
-                }
-            }
+            screenSetting = 3;
+            feedbackSubmit = true;
+            submitFeedback.setVisible(false);
 
-            if(go){
-                screenSetting = 3;
-                feedbackSubmit = true;
-                submitFeedback.setVisible(false);
+            for(int i = 0; i < 4; i ++){
+                feedback.add(feedbackInput.get(i));
+                feedbackInput.set(i, Color.WHITE);
             }
         }
 

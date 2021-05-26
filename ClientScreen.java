@@ -86,24 +86,38 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         g.fillRect(0, 0, 800, 600);
 
         g.setColor(Color.BLACK);
-
         if(screenSetting == 0){ //instructions
             //rules.paintIcon(this, g, 0, 0);
         }
-        else if(screenSetting == 1){ //regular screen
+        else{ //screens with board drawn
             int x = 50;
             int y = 75;
 
             int stringX = x - 15;
             int stringY = y + 20;
 
-            g.setFont(f);
-            g.drawString("Enter your guess by clicking", stringX + 350, stringY + 100);
-            g.drawString("on the colors from the color", stringX + 350, stringY + 125);
-            g.drawString("pallete and then clicking on", stringX + 350, stringY + 150);
-            g.drawString("the circles in the first row", stringX + 350, stringY + 175);
-            g.drawString("of the guess board. When you", stringX + 350, stringY + 200);
-            g.drawString("are ready, hit submit.", stringX + 350, stringY + 225);
+            if(screenSetting == 1){
+                g.setFont(f);
+                g.drawString("Enter your guess by clicking", stringX + 350, stringY + 100);
+                g.drawString("on the colors from the color", stringX + 350, stringY + 125);
+                g.drawString("pallete and then clicking on", stringX + 350, stringY + 150);
+                g.drawString("the circles in the first row", stringX + 350, stringY + 175);
+                g.drawString("of the guess board. When you", stringX + 350, stringY + 200);
+                g.drawString("are ready, hit submit.", stringX + 350, stringY + 225);
+            }
+            else if(screenSetting == 3){
+                g.setFont(f);
+                g.drawString("You've recieved feedback on your", stringX + 350, stringY + 100);
+                g.drawString("guess. A red circle means one of", stringX + 350, stringY + 125);
+                g.drawString("your guesses is in the right place", stringX + 350, stringY + 150);
+                g.drawString("and is the right color. A black circle", stringX + 350, stringY + 175);
+                g.drawString("means one of your guesses is the right", stringX + 350, stringY + 200);
+                g.drawString("color but is in the wrong place.", stringX + 350, stringY + 225);
+                g.drawString("A blank circle means one of your", stringX + 350, stringY + 250);
+                g.drawString("guesses is the wrong color and place.", stringX + 350, stringY + 275);
+
+            }
+
             g.drawRoundRect(x, y, 300, 500, 20, 20);
 
             for(int i = 50; i < 500; i += 50){
@@ -141,13 +155,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
             for(int r = 0; r < 500; r += 25){
                 for(int c = 0; c < 60; c += 30){
-                    if(fColor != null){
+                    if(fColor == null || fColor.equals(Color.WHITE)){
+                        g.setColor(Color.BLACK);
+                        g.drawOval(c + x + 250, r + y + 10, 10, 10);
+                        
+                        if(fColor != null && fColor.equals(Color.WHITE)){
+                            fColor = feedback.next();
+                        }
+                    }
+                    else if(fColor != null){
                         g.setColor(fColor);
                         g.fillOval(c + x + 250, r + y + 10, 10, 10);
                         fColor = feedback.next();
-                    }
-                    else{
-                        g.drawOval(c + x + 250, r + y + 10, 10, 10);
                     }
                 }
             }
@@ -190,6 +209,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     DLList inputList = (DLList)in.readObject();
 
                     feedback = inputList;
+                    screenSetting = 3;
+                    System.out.println("in");
+                    repaint();
+                    System.out.println("feedback " + feedback);
                 }
                 else if(guessSubmit){
                     out.reset();
@@ -222,6 +245,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 guessSubmit = true;
                 submit.setVisible(false);
                 System.out.println("false");
+                screenSetting = 2;
             }  
         }
 
