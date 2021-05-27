@@ -1,2 +1,3 @@
 -write the rules on the home screen
--feedback giving for server
+-displaying code on win/lose screen
+-restart button

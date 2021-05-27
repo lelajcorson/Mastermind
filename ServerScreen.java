@@ -27,6 +27,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
     private JButton startGame;
     private JButton chooseCode;
     private JButton submitFeedback;
+    private JButton restart;
     private String hostName;
     private int portNumber;
     private boolean feedbackSubmit;
@@ -103,7 +104,12 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 		chooseCode.setBounds(350, 500, 100, 40);
 		chooseCode.addActionListener(this);
 		add(chooseCode);
-        chooseCode.setVisible(false);
+
+        restart = new JButton("Restart");
+		restart.setBounds(350, 500, 100, 40);
+		restart.addActionListener(this);
+		add(restart);
+        restart.setVisible(false);
     }
 
     public Dimension getPreferredSize() {
@@ -319,8 +325,11 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     }
 
                     guessNumber ++;
-                    if(guessNumber > 9){
+                    if(guessNumber > 1){
                         screenSetting = 5;
+                        System.out.println("time");
+                        restart.setVisible(true);
+                        submit.setVisible(false);
                     }
                 }
                 else if(pin.available() != 0){
@@ -376,6 +385,15 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
             for(int i = 0; i < feedbackInput.size(); i ++){
                 feedback.add(feedbackInput.get(i));
             }
+        }
+        else if(e.getSource() == restart){
+            screenSetting = 0;
+            currentColor = null;
+            feedbackReset = false;
+            guessNumber = 0;
+
+            restart.setVisible(false);
+            startGame.setVisible(true);
         }
 
         repaint();

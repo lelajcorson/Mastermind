@@ -18,6 +18,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private DLList<Color> colorPalette;
     private JButton submit;
     private JButton startGame;
+    private JButton restart;
     private boolean guessSubmit;
     private Color yellow;
     private Color teal;
@@ -73,6 +74,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 		submit.addActionListener(this);
 		add(submit);
         submit.setVisible(false);
+
+        restart = new JButton("Restart");
+		restart.setBounds(350, 500, 100, 40);
+		restart.addActionListener(this);
+		add(restart);
+        restart.setVisible(false);
     }
 
     public Dimension getPreferredSize() {
@@ -238,9 +245,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                         submit.setVisible(true);
                         guessNumber ++;
 
-                        if(guessNumber > 9){
+                        if(guessNumber > 1){
                             screenSetting = 4;
                             submit.setVisible(false);
+                            restart.setVisible(true);
                         }
                     }
                     repaint();
@@ -277,6 +285,19 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 submit.setVisible(false);
                 screenSetting = 2;
             }  
+        }
+        else if(e.getSource() == restart){
+            guessSubmit = false;
+            screenSetting = 0;
+            currentRowIndex = 0;
+            currentColor = null;
+            guessNumber = 0;
+
+            guesses = new DLList<Color>();
+            feedback = new DLList<Color>();
+
+            startGame.setVisible(true);
+            restart.setVisible(false);
         }
 
         repaint();
