@@ -100,6 +100,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         g.setColor(Color.BLACK);
         if(screenSetting == 0){ //instructions
             //rules.paintIcon(this, g, 0, 0);
+            //g.setFont(b);
+            g.drawString("Mastermind", 250, 50);
+
+            g.setFont(f);
+            g.drawString("Welcome to Mastermind! You are the codebreaker. Your job is to break the other player's code. The code is 4 slots long and each slot can be 1 of 6 colors. You will figure out the code by making guesses. You have 10 guesses. After each guess, you will get feedback from the code maker about your guess. A red circle means you have a slot that is the right color in the right location, a white circle means you have a slot that is the right color but the wrong location, and a blank circle means you have a slot that is completely wrong. There is no specific order to the feedback. To make a guess, click on the color from the palette and then click on the circle that you would like to make that color. Once you have all of your colors imputed, click the submit button to submit your guess.", 30, 100);
+            g.drawString("is to break the other player's code. The code is 4 slots", 30, 100);
+            g.drawString("is to break the other player's code. The code is 4 slots long and each slot can be 1 of 6 colors. You will figure out the code by making guesses. You have 10 guesses. After each guess, you will get feedback from the code maker about your guess. A red circle means you have a slot that is the right color in the right location, a white circle means you have a slot that is the right color but the wrong location, and a blank circle means you have a slot that is completely wrong. There is no specific order to the feedback. To make a guess, click on the color from the palette and then click on the circle that you would like to make that color. Once you have all of your colors imputed, click the submit button to submit your guess.", 30, 100);
         }
         else if(screenSetting == 4 || screenSetting == 5){
             g.setFont(f);
@@ -270,7 +277,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                             submit.setVisible(true);
                             guessNumber ++;
 
-                            if(guessNumber > 1){
+                            if(guessNumber > 9d){
                                 screenSetting = 4;
                                 submit.setVisible(false);
                                 restart.setVisible(true);
@@ -322,6 +329,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
             guesses = new DLList<Color>();
             feedback = new DLList<Color>();
+            code = new DLList<Color>();
 
             startGame.setVisible(true);
             restart.setVisible(false);
