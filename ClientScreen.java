@@ -32,6 +32,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private Color currentColor;
     private int guessNumber;
     private Font f;
+    private Font b;
     //private ImageIcon rules;
 
     public ClientScreen() {
@@ -45,6 +46,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         currentColor = null;
         guessNumber = 0;
         f = new Font("Courier", Font.BOLD, 22);
+        b = new Font("Courier", Font.BOLD, 44);
         //rules = new ImageIcon("Images/clientRules.PNG");
 
         yellow = new Color(245, 215, 161);
@@ -100,13 +102,25 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         g.setColor(Color.BLACK);
         if(screenSetting == 0){ //instructions
             //rules.paintIcon(this, g, 0, 0);
-            //g.setFont(b);
+            g.setFont(b);
             g.drawString("Mastermind", 250, 50);
 
             g.setFont(f);
-            g.drawString("Welcome to Mastermind! You are the codebreaker. Your job is to break the other player's code. The code is 4 slots long and each slot can be 1 of 6 colors. You will figure out the code by making guesses. You have 10 guesses. After each guess, you will get feedback from the code maker about your guess. A red circle means you have a slot that is the right color in the right location, a white circle means you have a slot that is the right color but the wrong location, and a blank circle means you have a slot that is completely wrong. There is no specific order to the feedback. To make a guess, click on the color from the palette and then click on the circle that you would like to make that color. Once you have all of your colors imputed, click the submit button to submit your guess.", 30, 100);
-            g.drawString("is to break the other player's code. The code is 4 slots", 30, 100);
-            g.drawString("is to break the other player's code. The code is 4 slots long and each slot can be 1 of 6 colors. You will figure out the code by making guesses. You have 10 guesses. After each guess, you will get feedback from the code maker about your guess. A red circle means you have a slot that is the right color in the right location, a white circle means you have a slot that is the right color but the wrong location, and a blank circle means you have a slot that is completely wrong. There is no specific order to the feedback. To make a guess, click on the color from the palette and then click on the circle that you would like to make that color. Once you have all of your colors imputed, click the submit button to submit your guess.", 30, 100);
+            g.drawString("Welcome to Mastermind! You are the codebreaker. Your job", 30, 100);
+            g.drawString("is to break the other player's code. The code is 4 slots", 30, 125);
+            g.drawString("long and each slot can be 1 of 6 colors. You will figure", 30, 150);
+            g.drawString("out the code by making guesses. You have 10 guesses.", 30, 175);
+            g.drawString("After each guess, you will get feedback from the code", 30, 200);
+            g.drawString("maker about your guess. A red circle means you have a", 30, 225);
+            g.drawString("slot that is the right color in the right location,", 30, 250);
+            g.drawString("a white circle means you have a slot that is the right", 30, 275);
+            g.drawString("color but the wrong location, and a blank circle means", 30, 300);
+            g.drawString("you have a slot that is completely wrong. There is no", 30, 325);
+            g.drawString("specific order to the feedback. To make a guess, click", 30, 350);
+            g.drawString("on the color from the palette and then click on the", 30, 375);
+            g.drawString("circle that you would like to make that color. Once", 30, 400);
+            g.drawString("you have all of your colors imputed, click the submit", 30, 425);
+            g.drawString("button to submit your guess.", 30, 450);
         }
         else if(screenSetting == 4 || screenSetting == 5){
             g.setFont(f);
