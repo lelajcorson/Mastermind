@@ -36,6 +36,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
     private Font f;
     private boolean feedbackReset;
     private int guessNumber;
+    private boolean codeSend;
     //private ImageIcon rules;
 
     public ServerScreen() {
@@ -50,6 +51,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         f = new Font("Courier", Font.BOLD, 22);
         feedbackReset = false;
         guessNumber = 0;
+        codeSend = false;
         //rules = new ImageIcon("Images/serverRules.PNG");
 
         guesses = new DLList<Color>();
@@ -284,11 +286,39 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         }
         else if(screenSetting == 4){
             g.setFont(f);
-            g.drawString("They guessed your code. You lose.", 300, 300);
+            g.drawString("They guessed your code. You lose.", 100, 300);
+
+            //circles for code
+            code.reset();
+            Color cColor = code.next();
+            for(int c = 0; c < 200; c += 50){
+                if(cColor != null){
+                    g.setColor(cColor);
+                    g.fillOval(x + 60 + c, y - 40, 30, 30);
+                    cColor = code.next();
+                }
+                else{
+                    g.drawOval(x + 60 + c, y - 40, 30, 30);
+                }
+            }
         }
         else if(screenSetting == 5){
             g.setFont(f);
             g.drawString("They didn't guess your code. You win!", 100, 300);
+
+            //circles for code
+            code.reset();
+            Color cColor = code.next();
+            for(int c = 0; c < 200; c += 50){
+                if(cColor != null){
+                    g.setColor(cColor);
+                    g.fillOval(x + 60 + c, y - 40, 30, 30);
+                    cColor = code.next();
+                }
+                else{
+                    g.drawOval(x + 60 + c, y - 40, 30, 30);
+                }
+            }
         }
         
     }
@@ -331,6 +361,11 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                         restart.setVisible(true);
                         submit.setVisible(false);
                     }
+                }
+                else if(codeSend){
+                    codeSend = false;
+                    out.reset();
+                    out.writeObject(code);
                 }
                 else if(pin.available() != 0){
                     DLList inputList = (DLList)in.readObject();
@@ -376,6 +411,8 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 screenSetting ++;
                 chooseCode.setVisible(false);
             }            
+
+            codeSend = true;
         }
         else if(e.getSource() == submitFeedback){
             screenSetting = 3;

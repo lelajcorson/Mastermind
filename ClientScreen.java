@@ -16,6 +16,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private DLList<Color> guesses;
     private DLList<Color> feedback;
     private DLList<Color> colorPalette;
+    private DLList<Color> code;
     private JButton submit;
     private JButton startGame;
     private JButton restart;
@@ -56,6 +57,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         guesses = new DLList<Color>();
         feedback = new DLList<Color>();
         colorPalette = new DLList<Color>();
+        code = new DLList<Color>();
 
         colorPalette.add(yellow);
         colorPalette.add(orange);
@@ -89,6 +91,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
+        int x = 50;
+        int y = 75;
+
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, 800, 600);
 
@@ -99,14 +104,40 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         else if(screenSetting == 4){ //losing
             g.setFont(f);
             g.drawString("You lose because you ran out of guesses.", 100, 300);
+
+            //circles for code
+            code.reset();
+            Color cColor = code.next();
+            for(int c = 0; c < 200; c += 50){
+                if(cColor != null){
+                    g.setColor(cColor);
+                    g.fillOval(x + 60 + c, y - 40, 30, 30);
+                    cColor = code.next();
+                }
+                else{
+                    g.drawOval(x + 60 + c, y - 40, 30, 30);
+                }
+            }
         }
         else if(screenSetting == 5){//winning
             g.setFont(f);
             g.drawString("You guessed the code! You win!", 100, 300);
+
+            //circles for code
+            code.reset();
+            Color cColor = code.next();
+            for(int c = 0; c < 200; c += 50){
+                if(cColor != null){
+                    g.setColor(cColor);
+                    g.fillOval(x + 60 + c, y - 40, 30, 30);
+                    cColor = code.next();
+                }
+                else{
+                    g.drawOval(x + 60 + c, y - 40, 30, 30);
+                }
+            }
         }
         else{ //screens with board drawn
-            int x = 50;
-            int y = 75;
 
             int stringX = x - 15;
             int stringY = y + 20;
@@ -226,31 +257,37 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
             while(true){
                 if(pin.available() != 0){
-                    DLList inputList = (DLList)in.readObject();
-
-                    boolean go = true;
-
-                    for(int i = 0; i < inputList.size(); i ++){
-                        feedback.add((Color)inputList.get(i));
-                        if(!inputList.get(i).equals(Color.RED)){
-                            go = false;
-                        }
-                    }
-
-                    if(go){
-                        screenSetting = 5;
+                    if(code.get(0) == null){
+                        code = (DLList)in.readObject();
                     }
                     else{
-                        screenSetting = 3;
-                        submit.setVisible(true);
-                        guessNumber ++;
+                        DLList inputList = (DLList)in.readObject();
 
-                        if(guessNumber > 1){
-                            screenSetting = 4;
-                            submit.setVisible(false);
-                            restart.setVisible(true);
+                        boolean go = true;
+
+                        for(int i = 0; i < inputList.size(); i ++){
+                            feedback.add((Color)inputList.get(i));
+                            if(!inputList.get(i).equals(Color.RED)){
+                                go = false;
+                            }
+                        }
+
+                        if(go){
+                            screenSetting = 5;
+                        }
+                        else{
+                            screenSetting = 3;
+                            submit.setVisible(true);
+                            guessNumber ++;
+
+                            if(guessNumber > 1){
+                                screenSetting = 4;
+                                submit.setVisible(false);
+                                restart.setVisible(true);
+                            }
                         }
                     }
+                    
                     repaint();
                 }
                 else if(guessSubmit){
