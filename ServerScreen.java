@@ -34,6 +34,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
     private Color currentColor;
     private Font f;
     private boolean feedbackReset;
+    private int guessNumber;
     //private ImageIcon rules;
 
     public ServerScreen() {
@@ -47,6 +48,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         currentColor = null;
         f = new Font("Courier", Font.BOLD, 22);
         feedbackReset = false;
+        guessNumber = 0;
         //rules = new ImageIcon("Images/serverRules.PNG");
 
         guesses = new DLList<Color>();
@@ -244,7 +246,6 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 g.drawRoundRect(x + 450, y + 230, 100, 100, 20, 20);
 
                 if(feedbackReset){
-                    System.out.println("resetting");
                     for(int i = 0; i < 4; i ++){
                         feedbackInput.set(i, Color.WHITE);
                     }
@@ -275,6 +276,14 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 }
             }
         }
+        else if(screenSetting == 4){
+            g.setFont(f);
+            g.drawString("They guessed your code. You lose.", 300, 300);
+        }
+        else if(screenSetting == 5){
+            g.setFont(f);
+            g.drawString("They didn't guess your code. You win!", 100, 300);
+        }
         
     }
 
@@ -282,7 +291,6 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         ServerSocket sSocket = new ServerSocket(portNumber);
         Socket cSocket = sSocket.accept();
         ObjectOutputStream out = new ObjectOutputStream(cSocket.getOutputStream());
-        System.out.println("opened");
         ObjectInputStream in = new ObjectInputStream(cSocket.getInputStream());
         PushbackInputStream pin = new PushbackInputStream(cSocket.getInputStream());
 
@@ -290,18 +298,35 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
             while(true){
                 if(feedbackSubmit){
                     out.reset();
-                    System.out.println("feedback: " + feedbackInput);
                     out.writeObject(feedbackInput);
 
                     feedbackSubmit = false;
                     feedbackReset = true;
-                    screenSetting = 2;
+
+                    boolean go = true;
+                    for(int i = 0; i < feedbackInput.size(); i ++){
+                        if(!feedbackInput.get(i).equals(Color.RED)){
+                            go = false;
+                            break;
+                        }
+                    }
+
+                    if(go){
+                        screenSetting = 4;
+                    }
+                    else{
+                        screenSetting = 2;
+                    }
+
+                    guessNumber ++;
+                    if(guessNumber > 9){
+                        screenSetting = 5;
+                    }
                 }
                 else if(pin.available() != 0){
                     DLList inputList = (DLList)in.readObject();
 
                     guesses = inputList;
-                    System.out.println("sent");
                     submitFeedback.setVisible(true);
                     screenSetting = 3;
                 }
@@ -348,9 +373,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
             feedbackSubmit = true;
             submitFeedback.setVisible(false);
 
-            System.out.println("feedbackInput: " + feedbackInput);
             for(int i = 0; i < feedbackInput.size(); i ++){
-                System.out.println("adddinggg: " + feedbackInput.get(i));
                 feedback.add(feedbackInput.get(i));
             }
         }
@@ -397,7 +420,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 int index = r * 2 + c;
 
                 System.out.println("R: " + r + " C: " + c);
-                System.out.println("CenterX: " + centerX + " CenterY: " + centerY);
+                //System.out.println("CenterX: " + centerX + " CenterY: " + centerY);
 
 
                 if(x - centerX < 15 && y - centerY < 15){
