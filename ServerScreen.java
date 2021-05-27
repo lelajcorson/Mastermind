@@ -284,43 +284,32 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                 }
             }
         }
-        else if(screenSetting == 4){
+        else if(screenSetting == 4 || screenSetting == 5){
             g.setFont(f);
-            g.drawString("They guessed your code. You lose.", 100, 300);
 
+            if(screenSetting == 4){
+                g.drawString("They guessed your code. You lose.", 100, 300);
+            }
+            else if(screenSetting == 5){
+                g.drawString("They didn't guess your code. You win!", 100, 300);
+            }
+
+            g.drawString("Code: ", 100, 360);
+            g.drawRoundRect(x + 75, y + 250, 200, 50, 20, 20);
             //circles for code
             code.reset();
             Color cColor = code.next();
             for(int c = 0; c < 200; c += 50){
                 if(cColor != null){
                     g.setColor(cColor);
-                    g.fillOval(x + 60 + c, y - 40, 30, 30);
+                    g.fillOval(x + 85 + c, y + 260, 30, 30);
                     cColor = code.next();
                 }
                 else{
-                    g.drawOval(x + 60 + c, y - 40, 30, 30);
+                    g.drawOval(x + 85 + c, y + 260, 30, 30);
                 }
             }
         }
-        else if(screenSetting == 5){
-            g.setFont(f);
-            g.drawString("They didn't guess your code. You win!", 100, 300);
-
-            //circles for code
-            code.reset();
-            Color cColor = code.next();
-            for(int c = 0; c < 200; c += 50){
-                if(cColor != null){
-                    g.setColor(cColor);
-                    g.fillOval(x + 60 + c, y - 40, 30, 30);
-                    cColor = code.next();
-                }
-                else{
-                    g.drawOval(x + 60 + c, y - 40, 30, 30);
-                }
-            }
-        }
-        
     }
 
     public void poll() throws IOException, UnknownHostException {

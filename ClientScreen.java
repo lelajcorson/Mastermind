@@ -101,39 +101,29 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         if(screenSetting == 0){ //instructions
             //rules.paintIcon(this, g, 0, 0);
         }
-        else if(screenSetting == 4){ //losing
+        else if(screenSetting == 4 || screenSetting == 5){
             g.setFont(f);
-            g.drawString("You lose because you ran out of guesses.", 100, 300);
 
-            //circles for code
-            code.reset();
-            Color cColor = code.next();
-            for(int c = 0; c < 200; c += 50){
-                if(cColor != null){
-                    g.setColor(cColor);
-                    g.fillOval(x + 60 + c, y - 40, 30, 30);
-                    cColor = code.next();
-                }
-                else{
-                    g.drawOval(x + 60 + c, y - 40, 30, 30);
-                }
+            if(screenSetting == 4){
+                g.drawString("You lose because you ran out of guesses.", 100, 300);
             }
-        }
-        else if(screenSetting == 5){//winning
-            g.setFont(f);
-            g.drawString("You guessed the code! You win!", 100, 300);
+            else if(screenSetting == 5){
+                g.drawString("You guessed the code! You win!", 100, 300);
+            }
 
+            g.drawString("Code: ", 100, 360);
+            g.drawRoundRect(x + 130, y + 250, 200, 50, 20, 20);
             //circles for code
             code.reset();
             Color cColor = code.next();
             for(int c = 0; c < 200; c += 50){
                 if(cColor != null){
                     g.setColor(cColor);
-                    g.fillOval(x + 60 + c, y - 40, 30, 30);
+                    g.fillOval(x + 140 + c, y + 260, 30, 30);
                     cColor = code.next();
                 }
                 else{
-                    g.drawOval(x + 60 + c, y - 40, 30, 30);
+                    g.drawOval(x + 140 + c, y + 260, 30, 30);
                 }
             }
         }
