@@ -1,2 +1,0 @@
--write the rules on the home screen
--restart button
