@@ -115,13 +115,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             g.drawString("After each guess, you will get feedback from the code", 30, 200);
             g.drawString("maker about your guess. A red circle means you have a", 30, 225);
             g.drawString("slot that is the right color in the right location,", 30, 250);
-            g.drawString("a white circle means you have a slot that is the right", 30, 275);
+            g.drawString("a black circle means you have a slot that is the right", 30, 275);
             g.drawString("color but the wrong location, and a blank circle means", 30, 300);
             g.drawString("you have a slot that is completely wrong. There is no", 30, 325);
             g.drawString("specific order to the feedback. To make a guess, click", 30, 350);
             g.drawString("on the color from the palette and then click on the", 30, 375);
             g.drawString("circle that you would like to make that color. Once", 30, 400);
-            g.drawString("you have all of your colors imputed, click the submit", 30, 425);
+            g.drawString("you have all of your colors imputted, click the submit", 30, 425);
             g.drawString("button to submit your guess. The game will start once", 30, 450);
             g.drawString("the code maker chooses the code and you hit start game.", 30, 475);
         }

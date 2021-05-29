@@ -141,12 +141,12 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
            g.drawString("have 6 colors to choose from for each slot. You can", 30, 175);
            g.drawString("repeat colors if you would like. Then, the codebreaker", 30, 200);
            g.drawString("will guess your code. You will give feedback after each", 30, 225);
-           g.drawString("guess. You will send a white circle for each slot of", 30, 250);
+           g.drawString("guess. You will send a black circle for each slot of", 30, 250);
            g.drawString("their guess that is the right color but in the wrong", 30, 275);
            g.drawString("spot, a red circle for every slot that is totally", 30, 300);
            g.drawString("correct, and a blank circle for every slot that is", 30, 325);
            g.drawString("totally wrong. Because there are 4 slots in the code,", 30, 350);
-           g.drawString("you will send 4 colors (red, white, or blank) as", 30, 375);
+           g.drawString("you will send 4 colors (red, black, or blank) as", 30, 375);
            g.drawString("feedback each time. There should be no specific order", 30, 400);
            g.drawString("to your feedback", 30, 425);
         }
@@ -367,7 +367,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     guessNumber ++;
                     if(guessNumber > 9 && !go){
                         screenSetting = 5;
-\                        restart.setVisible(true);
+                        restart.setVisible(true);
                         submit.setVisible(false);
                     }
                 }
@@ -377,7 +377,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     out.writeObject(code);
                 }
                 else if(pin.available() != 0){
-\                    DLList inputList = (DLList)in.readObject();
+                    DLList inputList = (DLList)in.readObject();
 
                     guesses = inputList;
                     submitFeedback.setVisible(true);
