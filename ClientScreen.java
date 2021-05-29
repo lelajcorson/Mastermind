@@ -191,11 +191,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             guesses.reset();
             Color color = guesses.next();
 
-            //System.out.println("DLList: " + guesses);
             //drawing the guess circles
             for(int r = 0; r < 500; r += 50){
                 for(int c = 0; c < 240; c += 60){
-                    //System.out.println(color);
                     if(color != null){
                         g.setColor(color);
                         g.fillOval(c + x + 15, r + y + 10, 30, 30);
@@ -307,7 +305,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     repaint();
                 }
                 else if(guessSubmit){
-                    System.out.println("sending");
                     out.reset();
                     out.writeObject(guesses);
 
@@ -368,7 +365,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void mouseClicked(MouseEvent e) {}
 
     public void mousePressed(MouseEvent e) {
-        System.out.println("X: " + e.getX() + " Y: " + e.getY());
+        //System.out.println("X: " + e.getX() + " Y: " + e.getY());
         int x = e.getX();
         int y = e.getY();
         if(x > 460 && x < 690 && y > 65 && y < 115){
@@ -386,8 +383,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
             int index = r * 4 + c;
 
-            System.out.println("R: " + r + "C: " + c);
-
             int centerX = 80 + 60 * c;
             int centerY = 100 + 50 * r;
 
@@ -403,10 +398,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
             }
 
-            // System.out.println("tempX: " + tempX);
-            // System.out.println("c: " + c);
-            // System.out.println("tempY: " + tempY);
-            // System.out.println(index);
         }
 
         repaint();

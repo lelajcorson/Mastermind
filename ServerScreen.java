@@ -367,8 +367,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     guessNumber ++;
                     if(guessNumber > 9 && !go){
                         screenSetting = 5;
-                        System.out.println("time");
-                        restart.setVisible(true);
+\                        restart.setVisible(true);
                         submit.setVisible(false);
                     }
                 }
@@ -378,8 +377,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     out.writeObject(code);
                 }
                 else if(pin.available() != 0){
-                    System.out.println("hiii");
-                    DLList inputList = (DLList)in.readObject();
+\                    DLList inputList = (DLList)in.readObject();
 
                     guesses = inputList;
                     submitFeedback.setVisible(true);
@@ -471,7 +469,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
     public void mouseClicked(MouseEvent e) {}
 
     public void mousePressed(MouseEvent e) {
-        System.out.println("X: " + e.getX() + " Y: " + e.getY());
+        //System.out.println("X: " + e.getX() + " Y: " + e.getY());
         int x = e.getX();
         int y = e.getY();
         
@@ -500,10 +498,6 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 
                 int index = r * 2 + c;
 
-                System.out.println("R: " + r + " C: " + c);
-                //System.out.println("CenterX: " + centerX + " CenterY: " + centerY);
-
-
                 if(x - centerX < 15 && y - centerY < 15){
                     Color color = feedbackInput.get(index);
                     if(color == Color.WHITE){
@@ -515,7 +509,6 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     else if(color == Color.BLACK){
                        feedbackInput.set(index, Color.WHITE); 
                     }
-                    //System.out.println(feedbackInput);
                 }
 
             }
