@@ -152,7 +152,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
         }
         else if(screenSetting == 1){//choosing code
             g.setFont(b);
-            g.drawString("Choose the Code", 300, 50);
+            g.drawString("Choose the Code", 200, 50);
 
             //drawing the color palette
             g.setColor(Color.BLACK);
@@ -358,13 +358,14 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 
                     if(go){
                         screenSetting = 4;
+                        restart.setVisible(true);
                     }
                     else{
                         screenSetting = 2;
                     }
 
                     guessNumber ++;
-                    if(guessNumber > 9){
+                    if(guessNumber > 9 && !go){
                         screenSetting = 5;
                         System.out.println("time");
                         restart.setVisible(true);
@@ -377,6 +378,7 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
                     out.writeObject(code);
                 }
                 else if(pin.available() != 0){
+                    System.out.println("hiii");
                     DLList inputList = (DLList)in.readObject();
 
                     guesses = inputList;
@@ -440,6 +442,21 @@ public class ServerScreen extends JPanel implements ActionListener, MouseListene
 
             restart.setVisible(false);
             startGame.setVisible(true);
+
+            guesses = new DLList<Color>();
+            code = new DLList<Color>();
+            feedbackInput = new DLList<Color>();
+            feedback = new DLList<Color>();
+
+            feedbackInput.add(Color.WHITE);
+            feedbackInput.add(Color.WHITE);
+            feedbackInput.add(Color.WHITE);
+            feedbackInput.add(Color.WHITE);
+
+            code.add(new Color(242, 242, 242));
+            code.add(new Color(242, 242, 242));
+            code.add(new Color(242, 242, 242));
+            code.add(new Color(242, 242, 242));
         }
 
         repaint();

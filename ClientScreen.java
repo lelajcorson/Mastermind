@@ -33,6 +33,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private int guessNumber;
     private Font f;
     private Font b;
+    private boolean canStart;
     //private ImageIcon rules;
 
     public ClientScreen() {
@@ -45,6 +46,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         currentRowIndex = 0;
         currentColor = null;
         guessNumber = 0;
+        canStart = false;
         f = new Font("Courier", Font.BOLD, 22);
         b = new Font("Courier", Font.BOLD, 44);
         //rules = new ImageIcon("Images/clientRules.PNG");
@@ -120,7 +122,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             g.drawString("on the color from the palette and then click on the", 30, 375);
             g.drawString("circle that you would like to make that color. Once", 30, 400);
             g.drawString("you have all of your colors imputed, click the submit", 30, 425);
-            g.drawString("button to submit your guess.", 30, 450);
+            g.drawString("button to submit your guess. The game will start once", 30, 450);
+            g.drawString("the code maker chooses the code and you hit start game.", 30, 475);
         }
         else if(screenSetting == 4 || screenSetting == 5){
             g.setFont(f);
@@ -270,6 +273,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 if(pin.available() != 0){
                     if(code.get(0) == null){
                         code = (DLList)in.readObject();
+                        canStart = true;
                     }
                     else{
                         DLList inputList = (DLList)in.readObject();
@@ -285,13 +289,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
                         if(go){
                             screenSetting = 5;
+                            restart.setVisible(true);
                         }
                         else{
                             screenSetting = 3;
                             submit.setVisible(true);
                             guessNumber ++;
 
-                            if(guessNumber > 9d){
+                            if(guessNumber > 9){
                                 screenSetting = 4;
                                 submit.setVisible(false);
                                 restart.setVisible(true);
@@ -302,6 +307,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     repaint();
                 }
                 else if(guessSubmit){
+                    System.out.println("sending");
                     out.reset();
                     out.writeObject(guesses);
 
@@ -322,7 +328,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public void actionPerformed(ActionEvent e){
-        if(e.getSource() == startGame){
+        if(e.getSource() == startGame && canStart == true){
             screenSetting ++;
             startGame.setVisible(false);
             submit.setVisible(true);
@@ -340,6 +346,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             currentRowIndex = 0;
             currentColor = null;
             guessNumber = 0;
+            canStart = false;
 
             guesses = new DLList<Color>();
             feedback = new DLList<Color>();
